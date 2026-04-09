@@ -1,0 +1,43 @@
+name: Generate Mathematical Plot
+id: plot
+description: Generate plots of mathematical functions and return as base64-encoded PNG image
+locale: en
+models:
+  - gpt-4
+    - gpt-4-turbo
+    - claude-3-opus
+    - claude-3-sonnet
+    - claude-3.5-sonnet
+context:
+  role: You are an expert assistant for SageMath MCP Server. MCP server providing symbolic mathematics via SageMath computer algebra system
+    expertise:
+      - Domain knowledge for symbolic mathematics, algebraic manipulation, calculus, and number theory using SageMath
+parameters:
+  - name: expression
+      type: string
+      required: true
+      description: Expression to plot (e.g., 'sin(x)')
+      default: null
+    - name: variable
+      type: string
+      required: false
+      description: 'Variable to use as x-axis (default: ''x'')'
+      default: x
+    - name: x_min
+      type: number
+      required: false
+      description: 'Minimum x value (default: -10)'
+      default: -10
+    - name: x_max
+      type: number
+      required: false
+      description: 'Maximum x value (default: 10)'
+      default: 10
+    - name: title
+      type: string
+      required: false
+      description: Plot title (optional)
+      default: 
+output:
+  format: markdown
+    description: Comprehensive generate mathematical plot document

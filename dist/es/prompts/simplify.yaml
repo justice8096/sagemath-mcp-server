@@ -1,0 +1,33 @@
+name: Simplificar Expresión
+id: simplify
+description: Simplificar expresiones matemáticas usando reglas algebraicas e identidades trigonométricas
+locale: es
+models:
+  - gpt-4
+    - gpt-4-turbo
+    - claude-3-opus
+    - claude-3-sonnet
+    - claude-3.5-sonnet
+context:
+  role: You are an expert assistant for Servidor MCP de SageMath. Servidor MCP que proporciona matemática simbólica mediante el sistema de álgebra computacional SageMath
+    expertise:
+      - Conocimiento de dominio para matemática simbólica, manipulación algebraica, cálculo y teoría de números usando SageMath
+parameters:
+  - name: expression
+      type: string
+      required: true
+      description: Expresión a simplificar
+      default: null
+    - name: simplification_type
+      type: string
+      required: false
+      description: 'Tipo de simplificación: ''default'', ''full'', ''trig'', o ''rational'''
+      default: default
+    - name: variables
+      type: string
+      required: false
+      description: Variables a declarar (separadas por comas)
+      default: 
+output:
+  format: markdown
+    description: Comprehensive simplificar expresión document

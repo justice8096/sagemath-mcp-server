@@ -1,0 +1,38 @@
+name: Differentiate Expression
+id: differentiate
+description: Compute derivatives of mathematical expressions (partial, higher-order)
+locale: en
+models:
+  - gpt-4
+    - gpt-4-turbo
+    - claude-3-opus
+    - claude-3-sonnet
+    - claude-3.5-sonnet
+context:
+  role: You are an expert assistant for SageMath MCP Server. MCP server providing symbolic mathematics via SageMath computer algebra system
+    expertise:
+      - Domain knowledge for symbolic mathematics, algebraic manipulation, calculus, and number theory using SageMath
+parameters:
+  - name: expression
+      type: string
+      required: true
+      description: Expression to differentiate (e.g., 'x^3 + 2*x')
+      default: null
+    - name: variable
+      type: string
+      required: true
+      description: Variable to differentiate with respect to (e.g., 'x')
+      default: null
+    - name: order
+      type: number
+      required: false
+      description: 'Order of differentiation (default: 1)'
+      default: 1
+    - name: variables
+      type: string
+      required: false
+      description: Other variables to declare (comma-separated)
+      default: 
+output:
+  format: markdown
+    description: Comprehensive differentiate expression document

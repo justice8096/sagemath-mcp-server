@@ -1,0 +1,544 @@
+{
+  "displayName": "SageMath MCP Server",
+  "name": "sagemathmcpserver",
+  "icon": "file:icon.svg",
+  "group": [
+    "transform"
+  ],
+  "version": 1,
+  "description": "MCP server providing symbolic mathematics via SageMath computer algebra system",
+  "defaults": {
+    "name": "SageMath MCP Server"
+  },
+  "inputs": [
+    "main"
+  ],
+  "outputs": [
+    "main"
+  ],
+  "properties": [
+    {
+      "displayName": "Operation",
+      "name": "operation",
+      "type": "options",
+      "options": [
+        {
+          "name": "Evaluate SageMath Expression",
+          "value": "evaluate",
+          "description": "Execute arbitrary SageMath expressions and return the computed result"
+        },
+        {
+          "name": "Solve Equation",
+          "value": "solve_equation",
+          "description": "Solve algebraic and transcendental equations symbolically"
+        },
+        {
+          "name": "Differentiate Expression",
+          "value": "differentiate",
+          "description": "Compute derivatives of mathematical expressions (partial, higher-order)"
+        },
+        {
+          "name": "Integrate Expression",
+          "value": "integrate",
+          "description": "Compute indefinite and definite integrals of mathematical expressions"
+        },
+        {
+          "name": "Simplify Expression",
+          "value": "simplify",
+          "description": "Simplify mathematical expressions using algebraic rules and trigonometric identities"
+        },
+        {
+          "name": "Factor Expression",
+          "value": "factor",
+          "description": "Factor polynomials and integer expressions"
+        },
+        {
+          "name": "Matrix Operations",
+          "value": "matrix_ops",
+          "description": "Perform matrix operations: determinant, inverse, eigenvalues, rank, RREF"
+        },
+        {
+          "name": "Generate Mathematical Plot",
+          "value": "plot",
+          "description": "Generate plots of mathematical functions and return as base64-encoded PNG image"
+        },
+        {
+          "name": "Convert to LaTeX",
+          "value": "latex_convert",
+          "description": "Convert mathematical expressions to LaTeX notation for document preparation"
+        },
+        {
+          "name": "Number Theory Operations",
+          "value": "number_theory",
+          "description": "Perform number theory calculations: primality, factorization, divisor functions, and more"
+        }
+      ],
+      "default": "evaluate"
+    },
+    {
+      "displayName": "Expression",
+      "name": "expression",
+      "type": "string",
+      "required": true,
+      "default": "",
+      "description": "Valid SageMath expression to evaluate",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "evaluate"
+          ]
+        }
+      }
+    },
+    {
+      "displayName": "Equation",
+      "name": "equation",
+      "type": "string",
+      "required": true,
+      "default": "",
+      "description": "Equation to solve (e.g., 'x^2 - 4 == 0')",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "solve_equation"
+          ]
+        }
+      }
+    },
+    {
+      "displayName": "Variable",
+      "name": "variable",
+      "type": "string",
+      "required": true,
+      "default": "",
+      "description": "Variable to solve for (e.g., 'x')",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "solve_equation"
+          ]
+        }
+      }
+    },
+    {
+      "displayName": "Variables",
+      "name": "variables",
+      "type": "string",
+      "required": false,
+      "default": "",
+      "description": "Other variables to declare (comma-separated, e.g., 'a,b,c')",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "solve_equation"
+          ]
+        }
+      }
+    },
+    {
+      "displayName": "Expression",
+      "name": "expression",
+      "type": "string",
+      "required": true,
+      "default": "",
+      "description": "Expression to differentiate (e.g., 'x^3 + 2*x')",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "differentiate"
+          ]
+        }
+      }
+    },
+    {
+      "displayName": "Variable",
+      "name": "variable",
+      "type": "string",
+      "required": true,
+      "default": "",
+      "description": "Variable to differentiate with respect to (e.g., 'x')",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "differentiate"
+          ]
+        }
+      }
+    },
+    {
+      "displayName": "Order",
+      "name": "order",
+      "type": "string",
+      "required": false,
+      "default": 1,
+      "description": "Order of differentiation (default: 1)",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "differentiate"
+          ]
+        }
+      }
+    },
+    {
+      "displayName": "Variables",
+      "name": "variables",
+      "type": "string",
+      "required": false,
+      "default": "",
+      "description": "Other variables to declare (comma-separated)",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "differentiate"
+          ]
+        }
+      }
+    },
+    {
+      "displayName": "Expression",
+      "name": "expression",
+      "type": "string",
+      "required": true,
+      "default": "",
+      "description": "Expression to integrate (e.g., 'sin(x)')",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "integrate"
+          ]
+        }
+      }
+    },
+    {
+      "displayName": "Variable",
+      "name": "variable",
+      "type": "string",
+      "required": true,
+      "default": "",
+      "description": "Integration variable (e.g., 'x')",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "integrate"
+          ]
+        }
+      }
+    },
+    {
+      "displayName": "Lower Limit",
+      "name": "lower_limit",
+      "type": "string",
+      "required": false,
+      "default": "",
+      "description": "Lower limit for definite integral (leave empty for indefinite)",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "integrate"
+          ]
+        }
+      }
+    },
+    {
+      "displayName": "Upper Limit",
+      "name": "upper_limit",
+      "type": "string",
+      "required": false,
+      "default": "",
+      "description": "Upper limit for definite integral (leave empty for indefinite)",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "integrate"
+          ]
+        }
+      }
+    },
+    {
+      "displayName": "Variables",
+      "name": "variables",
+      "type": "string",
+      "required": false,
+      "default": "",
+      "description": "Other variables to declare (comma-separated)",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "integrate"
+          ]
+        }
+      }
+    },
+    {
+      "displayName": "Expression",
+      "name": "expression",
+      "type": "string",
+      "required": true,
+      "default": "",
+      "description": "Expression to simplify (e.g., '(x^2 - 1)/(x - 1)')",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "simplify"
+          ]
+        }
+      }
+    },
+    {
+      "displayName": "Simplification Type",
+      "name": "simplification_type",
+      "type": "string",
+      "required": false,
+      "default": "default",
+      "description": "Type of simplification: 'default', 'full', 'trig', or 'rational'",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "simplify"
+          ]
+        }
+      }
+    },
+    {
+      "displayName": "Variables",
+      "name": "variables",
+      "type": "string",
+      "required": false,
+      "default": "",
+      "description": "Variables to declare (comma-separated)",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "simplify"
+          ]
+        }
+      }
+    },
+    {
+      "displayName": "Expression",
+      "name": "expression",
+      "type": "string",
+      "required": true,
+      "default": "",
+      "description": "Expression or integer to factor (e.g., 'x^2 - 4' or '360')",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "factor"
+          ]
+        }
+      }
+    },
+    {
+      "displayName": "Variables",
+      "name": "variables",
+      "type": "string",
+      "required": false,
+      "default": "",
+      "description": "Variables to declare (comma-separated)",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "factor"
+          ]
+        }
+      }
+    },
+    {
+      "displayName": "Matrix",
+      "name": "matrix",
+      "type": "string",
+      "required": true,
+      "default": "",
+      "description": "Matrix definition (e.g., 'matrix([[1,2],[3,4]])')",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "matrix_ops"
+          ]
+        }
+      }
+    },
+    {
+      "displayName": "Operation",
+      "name": "operation",
+      "type": "string",
+      "required": true,
+      "default": "determinant",
+      "description": "Operation: 'determinant', 'inverse', 'eigenvalues', 'rank', 'rref', 'transpose'",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "matrix_ops"
+          ]
+        }
+      }
+    },
+    {
+      "displayName": "Ring",
+      "name": "ring",
+      "type": "string",
+      "required": false,
+      "default": "QQ",
+      "description": "Ring for matrix elements (e.g., 'RR' for reals, 'QQ' for rationals, 'ZZ' for integers)",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "matrix_ops"
+          ]
+        }
+      }
+    },
+    {
+      "displayName": "Expression",
+      "name": "expression",
+      "type": "string",
+      "required": true,
+      "default": "",
+      "description": "Expression to plot (e.g., 'sin(x)')",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "plot"
+          ]
+        }
+      }
+    },
+    {
+      "displayName": "Variable",
+      "name": "variable",
+      "type": "string",
+      "required": false,
+      "default": "x",
+      "description": "Variable to use as x-axis (default: 'x')",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "plot"
+          ]
+        }
+      }
+    },
+    {
+      "displayName": "X Min",
+      "name": "x_min",
+      "type": "string",
+      "required": false,
+      "default": -10,
+      "description": "Minimum x value (default: -10)",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "plot"
+          ]
+        }
+      }
+    },
+    {
+      "displayName": "X Max",
+      "name": "x_max",
+      "type": "string",
+      "required": false,
+      "default": 10,
+      "description": "Maximum x value (default: 10)",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "plot"
+          ]
+        }
+      }
+    },
+    {
+      "displayName": "Title",
+      "name": "title",
+      "type": "string",
+      "required": false,
+      "default": "",
+      "description": "Plot title (optional)",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "plot"
+          ]
+        }
+      }
+    },
+    {
+      "displayName": "Expression",
+      "name": "expression",
+      "type": "string",
+      "required": true,
+      "default": "",
+      "description": "SageMath expression to convert (e.g., 'sin(x) + 1/x')",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "latex_convert"
+          ]
+        }
+      }
+    },
+    {
+      "displayName": "Variables",
+      "name": "variables",
+      "type": "string",
+      "required": false,
+      "default": "",
+      "description": "Variables to declare (comma-separated)",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "latex_convert"
+          ]
+        }
+      }
+    },
+    {
+      "displayName": "Operation",
+      "name": "operation",
+      "type": "string",
+      "required": true,
+      "default": "",
+      "description": "Operation: 'is_prime', 'next_prime', 'factor', 'euler_phi', 'gcd', 'lcm', 'prime_range', 'sigma', 'moebius'",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "number_theory"
+          ]
+        }
+      }
+    },
+    {
+      "displayName": "Value",
+      "name": "value",
+      "type": "string",
+      "required": true,
+      "default": "",
+      "description": "Primary value(s) for the operation",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "number_theory"
+          ]
+        }
+      }
+    },
+    {
+      "displayName": "Second Value",
+      "name": "second_value",
+      "type": "string",
+      "required": false,
+      "default": "",
+      "description": "Secondary value for gcd/lcm operations",
+      "displayOptions": {
+        "show": {
+          "operation": [
+            "number_theory"
+          ]
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+name: Solve Equation
+id: solve-equation
+description: Solve algebraic and transcendental equations symbolically
+locale: en
+models:
+  - gpt-4
+    - gpt-4-turbo
+    - claude-3-opus
+    - claude-3-sonnet
+    - claude-3.5-sonnet
+context:
+  role: You are an expert assistant for SageMath MCP Server. MCP server providing symbolic mathematics via SageMath computer algebra system
+    expertise:
+      - Domain knowledge for symbolic mathematics, algebraic manipulation, calculus, and number theory using SageMath
+parameters:
+  - name: equation
+      type: string
+      required: true
+      description: Equation to solve (e.g., 'x^2 - 4 == 0')
+      default: null
+    - name: variable
+      type: string
+      required: true
+      description: Variable to solve for (e.g., 'x')
+      default: null
+    - name: variables
+      type: string
+      required: false
+      description: Other variables to declare (comma-separated, e.g., 'a,b,c')
+      default: 
+output:
+  format: markdown
+    description: Comprehensive solve equation document

@@ -1,0 +1,33 @@
+name: Number Theory Operations
+id: number-theory
+description: 'Perform number theory calculations: primality, factorization, divisor functions, and more'
+locale: en
+models:
+  - gpt-4
+    - gpt-4-turbo
+    - claude-3-opus
+    - claude-3-sonnet
+    - claude-3.5-sonnet
+context:
+  role: You are an expert assistant for SageMath MCP Server. MCP server providing symbolic mathematics via SageMath computer algebra system
+    expertise:
+      - Domain knowledge for symbolic mathematics, algebraic manipulation, calculus, and number theory using SageMath
+parameters:
+  - name: operation
+      type: string
+      required: true
+      description: 'Operation: ''is_prime'', ''next_prime'', ''factor'', ''euler_phi'', ''gcd'', ''lcm'', ''prime_range'', ''sigma'', ''moebius'''
+      default: null
+    - name: value
+      type: string
+      required: true
+      description: Primary value(s) for the operation
+      default: null
+    - name: second_value
+      type: string
+      required: false
+      description: Secondary value for gcd/lcm operations
+      default: 
+output:
+  format: markdown
+    description: Comprehensive number theory operations document

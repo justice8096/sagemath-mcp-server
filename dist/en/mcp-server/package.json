@@ -1,0 +1,23 @@
+{
+  "name": "@sagemath-mcp-server/mcp-server",
+  "version": "1.0.0",
+  "description": "MCP server providing symbolic mathematics via SageMath computer algebra system",
+  "author": "Justice",
+  "license": "GPL-3.0",
+  "type": "module",
+  "main": "src/index.ts",
+  "scripts": {
+    "start": "tsx src/index.ts",
+    "build": "tsc",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^0.6.0",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "typescript": "^5.3.3",
+    "tsx": "^4.7.0"
+  }
+}

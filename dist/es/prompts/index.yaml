@@ -1,0 +1,46 @@
+name: Servidor MCP de SageMath Prompts
+version: 1.0.0
+description: Servidor MCP que proporciona matemática simbólica mediante el sistema de álgebra computacional SageMath
+author: Justice
+locale: es
+prompts:
+  - id: evaluate
+      name: Evaluar Expresión de SageMath
+      description: Ejecutar expresiones arbitrarias de SageMath y retornar el resultado computado
+      file: evaluate.yaml
+    - id: solve-equation
+      name: Resolver Ecuación
+      description: Resolver ecuaciones algebraicas y trascendentales simbólicamente
+      file: solve-equation.yaml
+    - id: differentiate
+      name: Diferenciar Expresión
+      description: Calcular derivadas de expresiones matemáticas (parciales, orden superior)
+      file: differentiate.yaml
+    - id: integrate
+      name: Integrar Expresión
+      description: Calcular integrales indefinidas y definidas de expresiones matemáticas
+      file: integrate.yaml
+    - id: simplify
+      name: Simplificar Expresión
+      description: Simplificar expresiones matemáticas usando reglas algebraicas e identidades trigonométricas
+      file: simplify.yaml
+    - id: factor
+      name: Factorizar Expresión
+      description: Factorizar polinomios y expresiones enteras
+      file: factor.yaml
+    - id: matrix-ops
+      name: Operaciones Matriciales
+      description: 'Realizar operaciones matriciales: determinante, inversa, valores propios, rango, RREF'
+      file: matrix-ops.yaml
+    - id: plot
+      name: Generar Gráfico Matemático
+      description: Generar gráficos de funciones matemáticas retornando imagen PNG codificada en base64
+      file: plot.yaml
+    - id: latex-convert
+      name: Convertir a LaTeX
+      description: Convertir expresiones matemáticas a notación LaTeX para preparación de documentos
+      file: latex-convert.yaml
+    - id: number-theory
+      name: Operaciones de Teoría de Números
+      description: 'Realizar cálculos de teoría de números: primalidad, factorización, funciones divisoras'
+      file: number-theory.yaml

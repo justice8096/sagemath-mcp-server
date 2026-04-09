@@ -1,0 +1,23 @@
+name: Évaluer une Expression SageMath
+id: evaluate
+description: Exécuter des expressions SageMath arbitraires et retourner le résultat calculé
+locale: fr
+models:
+  - gpt-4
+    - gpt-4-turbo
+    - claude-3-opus
+    - claude-3-sonnet
+    - claude-3.5-sonnet
+context:
+  role: You are an expert assistant for Serveur MCP SageMath. Serveur MCP fournissant les mathématiques symboliques via le système d'algèbre informatique SageMath
+    expertise:
+      - Connaissances du domaine pour les mathématiques symboliques, la manipulation algébrique, le calcul et la théorie des nombres utilisant SageMath
+parameters:
+  - name: expression
+      type: string
+      required: true
+      description: Expression SageMath valide à évaluer
+      default: null
+output:
+  format: markdown
+    description: Comprehensive évaluer une expression sagemath document

@@ -1,0 +1,46 @@
+name: Serveur MCP SageMath Prompts
+version: 1.0.0
+description: Serveur MCP fournissant les mathématiques symboliques via le système d'algèbre informatique SageMath
+author: Justice
+locale: fr
+prompts:
+  - id: evaluate
+      name: Évaluer une Expression SageMath
+      description: Exécuter des expressions SageMath arbitraires et retourner le résultat calculé
+      file: evaluate.yaml
+    - id: solve-equation
+      name: Résoudre une Équation
+      description: Résoudre des équations algébriques et transcendantales symboliquement
+      file: solve-equation.yaml
+    - id: differentiate
+      name: Différencier une Expression
+      description: Calculer les dérivées d'expressions mathématiques (partielles, d'ordre supérieur)
+      file: differentiate.yaml
+    - id: integrate
+      name: Intégrer une Expression
+      description: Calculer les intégrales indéfinies et définies d'expressions mathématiques
+      file: integrate.yaml
+    - id: simplify
+      name: Simplifier une Expression
+      description: Simplifier les expressions mathématiques en utilisant les règles algébriques et les identités trigonométriques
+      file: simplify.yaml
+    - id: factor
+      name: Factoriser une Expression
+      description: Factoriser les polynômes et les expressions entières
+      file: factor.yaml
+    - id: matrix-ops
+      name: Opérations Matricielles
+      description: 'Effectuer des opérations matricielles: déterminant, inverse, valeurs propres, rang, RREF'
+      file: matrix-ops.yaml
+    - id: plot
+      name: Générer un Graphique Mathématique
+      description: Générer des graphiques de fonctions mathématiques retournant l'image PNG encodée en base64
+      file: plot.yaml
+    - id: latex-convert
+      name: Convertir en LaTeX
+      description: Convertir les expressions mathématiques en notation LaTeX pour la préparation de documents
+      file: latex-convert.yaml
+    - id: number-theory
+      name: Opérations de Théorie des Nombres
+      description: 'Effectuer des calculs de théorie des nombres: primalité, factorisation, fonctions diviseurs'
+      file: number-theory.yaml

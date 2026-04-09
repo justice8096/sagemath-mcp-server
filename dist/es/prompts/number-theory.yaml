@@ -1,0 +1,33 @@
+name: Operaciones de Teoría de Números
+id: number-theory
+description: 'Realizar cálculos de teoría de números: primalidad, factorización, funciones divisoras'
+locale: es
+models:
+  - gpt-4
+    - gpt-4-turbo
+    - claude-3-opus
+    - claude-3-sonnet
+    - claude-3.5-sonnet
+context:
+  role: You are an expert assistant for Servidor MCP de SageMath. Servidor MCP que proporciona matemática simbólica mediante el sistema de álgebra computacional SageMath
+    expertise:
+      - Conocimiento de dominio para matemática simbólica, manipulación algebraica, cálculo y teoría de números usando SageMath
+parameters:
+  - name: operation
+      type: string
+      required: true
+      description: 'Operación: ''is_prime'', ''next_prime'', ''factor'', ''euler_phi'', ''gcd'', ''lcm'', ''prime_range'', ''sigma'', ''moebius'''
+      default: null
+    - name: value
+      type: string
+      required: true
+      description: Valor(es) principal(es) para la operación
+      default: null
+    - name: second_value
+      type: string
+      required: false
+      description: Valor secundario para operaciones gcd/lcm
+      default: 
+output:
+  format: markdown
+    description: Comprehensive operaciones de teoría de números document

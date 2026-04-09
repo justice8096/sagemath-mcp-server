@@ -1,0 +1,298 @@
+[
+  {
+    "type": "function",
+    "function": {
+      "name": "evaluate",
+      "description": "Exécuter des expressions SageMath arbitraires et retourner le résultat calculé",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "expression": {
+            "type": "string",
+            "description": "Expression SageMath valide à évaluer"
+          }
+        },
+        "required": [
+          "expression"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "solve_equation",
+      "description": "Résoudre des équations algébriques et transcendantales symboliquement",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "equation": {
+            "type": "string",
+            "description": "Équation à résoudre (ex: 'x^2 - 4 == 0')"
+          },
+          "variable": {
+            "type": "string",
+            "description": "Variable à résoudre (ex: 'x')"
+          },
+          "variables": {
+            "type": "string",
+            "description": "Autres variables à déclarer (séparées par des virgules)",
+            "default": ""
+          }
+        },
+        "required": [
+          "equation",
+          "variable"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "differentiate",
+      "description": "Calculer les dérivées d'expressions mathématiques (partielles, d'ordre supérieur)",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "expression": {
+            "type": "string",
+            "description": "Expression à différencier (ex: 'x^3 + 2*x')"
+          },
+          "variable": {
+            "type": "string",
+            "description": "Variable par rapport à laquelle différencier"
+          },
+          "order": {
+            "type": "number",
+            "description": "Ordre de différenciation (default: 1)",
+            "default": 1
+          },
+          "variables": {
+            "type": "string",
+            "description": "Autres variables à déclarer (séparées par des virgules)",
+            "default": ""
+          }
+        },
+        "required": [
+          "expression",
+          "variable"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "integrate",
+      "description": "Calculer les intégrales indéfinies et définies d'expressions mathématiques",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "expression": {
+            "type": "string",
+            "description": "Expression à intégrer (ex: 'sin(x)')"
+          },
+          "variable": {
+            "type": "string",
+            "description": "Variable d'intégration"
+          },
+          "lower_limit": {
+            "type": "string",
+            "description": "Limite inférieure pour l'intégrale définie (laisser vide pour indéfinie)",
+            "default": ""
+          },
+          "upper_limit": {
+            "type": "string",
+            "description": "Limite supérieure pour l'intégrale définie (laisser vide pour indéfinie)",
+            "default": ""
+          },
+          "variables": {
+            "type": "string",
+            "description": "Autres variables à déclarer (séparées par des virgules)",
+            "default": ""
+          }
+        },
+        "required": [
+          "expression",
+          "variable"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "simplify",
+      "description": "Simplifier les expressions mathématiques en utilisant les règles algébriques et les identités trigonométriques",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "expression": {
+            "type": "string",
+            "description": "Expression à simplifier"
+          },
+          "simplification_type": {
+            "type": "string",
+            "description": "Type de simplification: 'default', 'full', 'trig', ou 'rational'",
+            "default": "default"
+          },
+          "variables": {
+            "type": "string",
+            "description": "Variables à déclarer (séparées par des virgules)",
+            "default": ""
+          }
+        },
+        "required": [
+          "expression"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "factor",
+      "description": "Factoriser les polynômes et les expressions entières",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "expression": {
+            "type": "string",
+            "description": "Expression ou entier à factoriser"
+          },
+          "variables": {
+            "type": "string",
+            "description": "Variables à déclarer (séparées par des virgules)",
+            "default": ""
+          }
+        },
+        "required": [
+          "expression"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "matrix_ops",
+      "description": "Effectuer des opérations matricielles: déterminant, inverse, valeurs propres, rang, RREF",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "matrix": {
+            "type": "string",
+            "description": "Définition de la matrice"
+          },
+          "operation": {
+            "type": "string",
+            "description": "Opération: 'determinant', 'inverse', 'eigenvalues', 'rank', 'rref', 'transpose'",
+            "default": "determinant"
+          },
+          "ring": {
+            "type": "string",
+            "description": "Anneau pour les éléments de la matrice",
+            "default": "QQ"
+          }
+        },
+        "required": [
+          "matrix",
+          "operation"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "plot",
+      "description": "Générer des graphiques de fonctions mathématiques retournant l'image PNG encodée en base64",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "expression": {
+            "type": "string",
+            "description": "Expression à représenter graphiquement"
+          },
+          "variable": {
+            "type": "string",
+            "description": "Variable pour l'axe x (default: 'x')",
+            "default": "x"
+          },
+          "x_min": {
+            "type": "number",
+            "description": "Valeur minimale de x",
+            "default": -10
+          },
+          "x_max": {
+            "type": "number",
+            "description": "Valeur maximale de x",
+            "default": 10
+          },
+          "title": {
+            "type": "string",
+            "description": "Titre du graphique (optionnel)",
+            "default": ""
+          }
+        },
+        "required": [
+          "expression"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "latex_convert",
+      "description": "Convertir les expressions mathématiques en notation LaTeX pour la préparation de documents",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "expression": {
+            "type": "string",
+            "description": "Expression SageMath à convertir"
+          },
+          "variables": {
+            "type": "string",
+            "description": "Variables à déclarer (séparées par des virgules)",
+            "default": ""
+          }
+        },
+        "required": [
+          "expression"
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "number_theory",
+      "description": "Effectuer des calculs de théorie des nombres: primalité, factorisation, fonctions diviseurs",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "operation": {
+            "type": "string",
+            "description": "Opération: 'is_prime', 'next_prime', 'factor', 'euler_phi', 'gcd', 'lcm', 'prime_range', 'sigma', 'moebius'"
+          },
+          "value": {
+            "type": "string",
+            "description": "Valeur(s) principal(aux) pour l'opération"
+          },
+          "second_value": {
+            "type": "string",
+            "description": "Valeur secondaire pour les opérations gcd/lcm",
+            "default": ""
+          }
+        },
+        "required": [
+          "operation",
+          "value"
+        ]
+      }
+    }
+  }
+]

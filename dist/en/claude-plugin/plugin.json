@@ -1,0 +1,77 @@
+{
+  "name": "sagemath-mcp-server",
+  "version": "1.0.0",
+  "description": "MCP server providing symbolic mathematics via SageMath computer algebra system",
+  "author": "Justice",
+  "license": "GPL-3.0",
+  "keywords": [
+    "sagemath",
+    "mathematics",
+    "symbolic",
+    "algebra",
+    "calculus",
+    "computer-algebra",
+    "mcp",
+    "mcp-server"
+  ],
+  "locale": "en",
+  "skills": [
+    {
+      "name": "symbolic-math",
+      "description": "Domain knowledge for symbolic mathematics, algebraic manipulation, calculus, and number theory using SageMath",
+      "path": "skills/symbolic-math"
+    }
+  ],
+  "commands": [
+    {
+      "name": "evaluate",
+      "description": "Execute arbitrary SageMath expressions and return the computed result",
+      "path": "commands/evaluate.md"
+    },
+    {
+      "name": "solve-equation",
+      "description": "Solve algebraic and transcendental equations symbolically",
+      "path": "commands/solve-equation.md"
+    },
+    {
+      "name": "differentiate",
+      "description": "Compute derivatives of mathematical expressions (partial, higher-order)",
+      "path": "commands/differentiate.md"
+    },
+    {
+      "name": "integrate",
+      "description": "Compute indefinite and definite integrals of mathematical expressions",
+      "path": "commands/integrate.md"
+    },
+    {
+      "name": "simplify",
+      "description": "Simplify mathematical expressions using algebraic rules and trigonometric identities",
+      "path": "commands/simplify.md"
+    },
+    {
+      "name": "factor",
+      "description": "Factor polynomials and integer expressions",
+      "path": "commands/factor.md"
+    },
+    {
+      "name": "matrix-ops",
+      "description": "Perform matrix operations: determinant, inverse, eigenvalues, rank, RREF",
+      "path": "commands/matrix-ops.md"
+    },
+    {
+      "name": "plot",
+      "description": "Generate plots of mathematical functions and return as base64-encoded PNG image",
+      "path": "commands/plot.md"
+    },
+    {
+      "name": "latex-convert",
+      "description": "Convert mathematical expressions to LaTeX notation for document preparation",
+      "path": "commands/latex-convert.md"
+    },
+    {
+      "name": "number-theory",
+      "description": "Perform number theory calculations: primality, factorization, divisor functions, and more",
+      "path": "commands/number-theory.md"
+    }
+  ]
+}

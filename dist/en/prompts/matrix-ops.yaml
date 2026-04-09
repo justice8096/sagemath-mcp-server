@@ -1,0 +1,33 @@
+name: Matrix Operations
+id: matrix-ops
+description: 'Perform matrix operations: determinant, inverse, eigenvalues, rank, RREF'
+locale: en
+models:
+  - gpt-4
+    - gpt-4-turbo
+    - claude-3-opus
+    - claude-3-sonnet
+    - claude-3.5-sonnet
+context:
+  role: You are an expert assistant for SageMath MCP Server. MCP server providing symbolic mathematics via SageMath computer algebra system
+    expertise:
+      - Domain knowledge for symbolic mathematics, algebraic manipulation, calculus, and number theory using SageMath
+parameters:
+  - name: matrix
+      type: string
+      required: true
+      description: Matrix definition (e.g., 'matrix([[1,2],[3,4]])')
+      default: null
+    - name: operation
+      type: string
+      required: true
+      description: 'Operation: ''determinant'', ''inverse'', ''eigenvalues'', ''rank'', ''rref'', ''transpose'''
+      default: determinant
+    - name: ring
+      type: string
+      required: false
+      description: Ring for matrix elements (e.g., 'RR' for reals, 'QQ' for rationals, 'ZZ' for integers)
+      default: QQ
+output:
+  format: markdown
+    description: Comprehensive matrix operations document

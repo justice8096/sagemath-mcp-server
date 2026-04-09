@@ -1,1 +1,181 @@
-﻿
+{
+  "metadata": {
+    "name": "Serveur MCP SageMath",
+    "description": "Serveur MCP fournissant les mathématiques symboliques via le système d'algèbre informatique SageMath"
+  },
+  "skills": {
+    "symbolic-math": {
+      "displayName": "Mathématiques Symboliques",
+      "description": "Connaissances du domaine pour les mathématiques symboliques, la manipulation algébrique, le calcul et la théorie des nombres utilisant SageMath"
+    }
+  },
+  "commands": {
+    "evaluate": {
+      "displayName": "Évaluer une Expression SageMath",
+      "description": "Exécuter des expressions SageMath arbitraires et retourner le résultat calculé",
+      "parameters": {
+        "expression": {
+          "description": "Expression SageMath valide à évaluer"
+        }
+      }
+    },
+    "solve-equation": {
+      "displayName": "Résoudre une Équation",
+      "description": "Résoudre des équations algébriques et transcendantales symboliquement",
+      "parameters": {
+        "equation": {
+          "description": "Équation à résoudre (ex: 'x^2 - 4 == 0')"
+        },
+        "variable": {
+          "description": "Variable à résoudre (ex: 'x')"
+        },
+        "variables": {
+          "description": "Autres variables à déclarer (séparées par des virgules)"
+        }
+      }
+    },
+    "differentiate": {
+      "displayName": "Différencier une Expression",
+      "description": "Calculer les dérivées d'expressions mathématiques (partielles, d'ordre supérieur)",
+      "parameters": {
+        "expression": {
+          "description": "Expression à différencier (ex: 'x^3 + 2*x')"
+        },
+        "variable": {
+          "description": "Variable par rapport à laquelle différencier"
+        },
+        "order": {
+          "description": "Ordre de différenciation (default: 1)"
+        },
+        "variables": {
+          "description": "Autres variables à déclarer (séparées par des virgules)"
+        }
+      }
+    },
+    "integrate": {
+      "displayName": "Intégrer une Expression",
+      "description": "Calculer les intégrales indéfinies et définies d'expressions mathématiques",
+      "parameters": {
+        "expression": {
+          "description": "Expression à intégrer (ex: 'sin(x)')"
+        },
+        "variable": {
+          "description": "Variable d'intégration"
+        },
+        "lower_limit": {
+          "description": "Limite inférieure pour l'intégrale définie (laisser vide pour indéfinie)"
+        },
+        "upper_limit": {
+          "description": "Limite supérieure pour l'intégrale définie (laisser vide pour indéfinie)"
+        },
+        "variables": {
+          "description": "Autres variables à déclarer (séparées par des virgules)"
+        }
+      }
+    },
+    "simplify": {
+      "displayName": "Simplifier une Expression",
+      "description": "Simplifier les expressions mathématiques en utilisant les règles algébriques et les identités trigonométriques",
+      "parameters": {
+        "expression": {
+          "description": "Expression à simplifier"
+        },
+        "simplification_type": {
+          "description": "Type de simplification: 'default', 'full', 'trig', ou 'rational'"
+        },
+        "variables": {
+          "description": "Variables à déclarer (séparées par des virgules)"
+        }
+      }
+    },
+    "factor": {
+      "displayName": "Factoriser une Expression",
+      "description": "Factoriser les polynômes et les expressions entières",
+      "parameters": {
+        "expression": {
+          "description": "Expression ou entier à factoriser"
+        },
+        "variables": {
+          "description": "Variables à déclarer (séparées par des virgules)"
+        }
+      }
+    },
+    "matrix-ops": {
+      "displayName": "Opérations Matricielles",
+      "description": "Effectuer des opérations matricielles: déterminant, inverse, valeurs propres, rang, RREF",
+      "parameters": {
+        "matrix": {
+          "description": "Définition de la matrice"
+        },
+        "operation": {
+          "description": "Opération: 'determinant', 'inverse', 'eigenvalues', 'rank', 'rref', 'transpose'"
+        },
+        "ring": {
+          "description": "Anneau pour les éléments de la matrice"
+        }
+      }
+    },
+    "plot": {
+      "displayName": "Générer un Graphique Mathématique",
+      "description": "Générer des graphiques de fonctions mathématiques retournant l'image PNG encodée en base64",
+      "parameters": {
+        "expression": {
+          "description": "Expression à représenter graphiquement"
+        },
+        "variable": {
+          "description": "Variable pour l'axe x (default: 'x')"
+        },
+        "x_min": {
+          "description": "Valeur minimale de x"
+        },
+        "x_max": {
+          "description": "Valeur maximale de x"
+        },
+        "title": {
+          "description": "Titre du graphique (optionnel)"
+        }
+      }
+    },
+    "latex-convert": {
+      "displayName": "Convertir en LaTeX",
+      "description": "Convertir les expressions mathématiques en notation LaTeX pour la préparation de documents",
+      "parameters": {
+        "expression": {
+          "description": "Expression SageMath à convertir"
+        },
+        "variables": {
+          "description": "Variables à déclarer (séparées par des virgules)"
+        }
+      }
+    },
+    "number-theory": {
+      "displayName": "Opérations de Théorie des Nombres",
+      "description": "Effectuer des calculs de théorie des nombres: primalité, factorisation, fonctions diviseurs",
+      "parameters": {
+        "operation": {
+          "description": "Opération: 'is_prime', 'next_prime', 'factor', 'euler_phi', 'gcd', 'lcm', 'prime_range', 'sigma', 'moebius'"
+        },
+        "value": {
+          "description": "Valeur(s) principal(aux) pour l'opération"
+        },
+        "second_value": {
+          "description": "Valeur secondaire pour les opérations gcd/lcm"
+        }
+      }
+    }
+  },
+  "templates": {},
+  "errors": {
+    "sage_not_found": "SageMath introuvable. Installez SageMath localement ou définissez la variable d'environnement SAGE_DOCKER_IMAGE.",
+    "timeout": "Le calcul a dépassé le délai d'expiration après {seconds} secondes. Essayez une expression plus simple ou augmentez SAGE_TIMEOUT.",
+    "invalid_expression": "Expression mathématique invalide: {detail}",
+    "execution_failed": "L'exécution de SageMath a échoué: {detail}",
+    "invalid_matrix": "Définition de matrice invalide: {detail}",
+    "invalid_operation": "Opération inconnue: {operation}"
+  },
+  "status": {
+    "using_local": "Utilisation de l'installation locale de SageMath",
+    "using_docker": "Utilisation de SageMath Docker ({image})",
+    "initialized": "Serveur MCP SageMath initialisé"
+  }
+}

@@ -1,13 +1,13 @@
-﻿{
+{
   "name": "sagemath-mcp-server",
   "version": "1.0.0",
   "description": "MCP server providing symbolic mathematics via SageMath computer algebra system",
   "type": "module",
-  "main": "dist/index.js",
+  "main": "build/index.js",
   "scripts": {
-    "start": "node dist/index.js",
-    "start:http": "TRANSPORT=http node dist/index.js",
-    "start:stdio": "node dist/index.js",
+    "start": "node build/index.js",
+    "start:http": "TRANSPORT=http node build/index.js",
+    "start:stdio": "node build/index.js",
     "dev": "tsx watch src/index.ts",
     "build": "tsc",
     "build:formats": "tsx build.ts",

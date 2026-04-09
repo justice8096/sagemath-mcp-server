@@ -1,0 +1,46 @@
+name: SageMath MCP Server Prompts
+version: 1.0.0
+description: MCP server providing symbolic mathematics via SageMath computer algebra system
+author: Justice
+locale: en
+prompts:
+  - id: evaluate
+      name: Evaluate SageMath Expression
+      description: Execute arbitrary SageMath expressions and return the computed result
+      file: evaluate.yaml
+    - id: solve-equation
+      name: Solve Equation
+      description: Solve algebraic and transcendental equations symbolically
+      file: solve-equation.yaml
+    - id: differentiate
+      name: Differentiate Expression
+      description: Compute derivatives of mathematical expressions (partial, higher-order)
+      file: differentiate.yaml
+    - id: integrate
+      name: Integrate Expression
+      description: Compute indefinite and definite integrals of mathematical expressions
+      file: integrate.yaml
+    - id: simplify
+      name: Simplify Expression
+      description: Simplify mathematical expressions using algebraic rules and trigonometric identities
+      file: simplify.yaml
+    - id: factor
+      name: Factor Expression
+      description: Factor polynomials and integer expressions
+      file: factor.yaml
+    - id: matrix-ops
+      name: Matrix Operations
+      description: 'Perform matrix operations: determinant, inverse, eigenvalues, rank, RREF'
+      file: matrix-ops.yaml
+    - id: plot
+      name: Generate Mathematical Plot
+      description: Generate plots of mathematical functions and return as base64-encoded PNG image
+      file: plot.yaml
+    - id: latex-convert
+      name: Convert to LaTeX
+      description: Convert mathematical expressions to LaTeX notation for document preparation
+      file: latex-convert.yaml
+    - id: number-theory
+      name: Number Theory Operations
+      description: 'Perform number theory calculations: primality, factorization, divisor functions, and more'
+      file: number-theory.yaml

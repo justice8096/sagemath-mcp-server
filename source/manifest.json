@@ -1,1 +1,305 @@
-﻿
+{
+  "metadata": {
+    "name": "SageMath MCP Server",
+    "version": "1.0.0",
+    "description": "MCP server providing symbolic mathematics via SageMath computer algebra system",
+    "author": "Justice",
+    "license": "GPL-3.0",
+    "repository": "https://github.com/justice8096/sagemath-mcp-server",
+    "keywords": [
+      "sagemath",
+      "mathematics",
+      "symbolic",
+      "algebra",
+      "calculus",
+      "computer-algebra",
+      "mcp",
+      "mcp-server"
+    ],
+    "defaultLocale": "en",
+    "locales": ["en", "es", "fr"]
+  },
+  "skills": [
+    {
+      "name": "symbolic-math",
+      "displayName": "Symbolic Mathematics",
+      "description": "Domain knowledge for symbolic mathematics, algebraic manipulation, calculus, and number theory using SageMath",
+      "path": "skills/symbolic-math.md",
+      "keywords": ["mathematics", "algebra", "calculus", "symbolic"]
+    }
+  ],
+  "commands": [
+    {
+      "name": "evaluate",
+      "displayName": "Evaluate SageMath Expression",
+      "description": "Execute arbitrary SageMath expressions and return the computed result",
+      "path": "commands/evaluate.md",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "expression": {
+            "type": "string",
+            "description": "Valid SageMath expression to evaluate"
+          }
+        },
+        "required": ["expression"]
+      },
+      "keywords": ["evaluate", "compute", "expression"]
+    },
+    {
+      "name": "solve-equation",
+      "displayName": "Solve Equation",
+      "description": "Solve algebraic and transcendental equations symbolically",
+      "path": "commands/solve-equation.md",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "equation": {
+            "type": "string",
+            "description": "Equation to solve (e.g., 'x^2 - 4 == 0')"
+          },
+          "variable": {
+            "type": "string",
+            "description": "Variable to solve for (e.g., 'x')"
+          },
+          "variables": {
+            "type": "string",
+            "description": "Other variables to declare (comma-separated, e.g., 'a,b,c')",
+            "default": ""
+          }
+        },
+        "required": ["equation", "variable"]
+      },
+      "keywords": ["solve", "equation", "algebra"]
+    },
+    {
+      "name": "differentiate",
+      "displayName": "Differentiate Expression",
+      "description": "Compute derivatives of mathematical expressions (partial, higher-order)",
+      "path": "commands/differentiate.md",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "expression": {
+            "type": "string",
+            "description": "Expression to differentiate (e.g., 'x^3 + 2*x')"
+          },
+          "variable": {
+            "type": "string",
+            "description": "Variable to differentiate with respect to (e.g., 'x')"
+          },
+          "order": {
+            "type": "number",
+            "description": "Order of differentiation (default: 1)",
+            "default": 1
+          },
+          "variables": {
+            "type": "string",
+            "description": "Other variables to declare (comma-separated)",
+            "default": ""
+          }
+        },
+        "required": ["expression", "variable"]
+      },
+      "keywords": ["derivative", "differentiate", "calculus"]
+    },
+    {
+      "name": "integrate",
+      "displayName": "Integrate Expression",
+      "description": "Compute indefinite and definite integrals of mathematical expressions",
+      "path": "commands/integrate.md",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "expression": {
+            "type": "string",
+            "description": "Expression to integrate (e.g., 'sin(x)')"
+          },
+          "variable": {
+            "type": "string",
+            "description": "Integration variable (e.g., 'x')"
+          },
+          "lower_limit": {
+            "type": "string",
+            "description": "Lower limit for definite integral (leave empty for indefinite)",
+            "default": ""
+          },
+          "upper_limit": {
+            "type": "string",
+            "description": "Upper limit for definite integral (leave empty for indefinite)",
+            "default": ""
+          },
+          "variables": {
+            "type": "string",
+            "description": "Other variables to declare (comma-separated)",
+            "default": ""
+          }
+        },
+        "required": ["expression", "variable"]
+      },
+      "keywords": ["integral", "integrate", "calculus"]
+    },
+    {
+      "name": "simplify",
+      "displayName": "Simplify Expression",
+      "description": "Simplify mathematical expressions using algebraic rules and trigonometric identities",
+      "path": "commands/simplify.md",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "expression": {
+            "type": "string",
+            "description": "Expression to simplify (e.g., '(x^2 - 1)/(x - 1)')"
+          },
+          "simplification_type": {
+            "type": "string",
+            "description": "Type of simplification: 'default', 'full', 'trig', or 'rational'",
+            "default": "default"
+          },
+          "variables": {
+            "type": "string",
+            "description": "Variables to declare (comma-separated)",
+            "default": ""
+          }
+        },
+        "required": ["expression"]
+      },
+      "keywords": ["simplify", "algebra"]
+    },
+    {
+      "name": "factor",
+      "displayName": "Factor Expression",
+      "description": "Factor polynomials and integer expressions",
+      "path": "commands/factor.md",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "expression": {
+            "type": "string",
+            "description": "Expression or integer to factor (e.g., 'x^2 - 4' or '360')"
+          },
+          "variables": {
+            "type": "string",
+            "description": "Variables to declare (comma-separated)",
+            "default": ""
+          }
+        },
+        "required": ["expression"]
+      },
+      "keywords": ["factor", "factorization", "algebra"]
+    },
+    {
+      "name": "matrix-ops",
+      "displayName": "Matrix Operations",
+      "description": "Perform matrix operations: determinant, inverse, eigenvalues, rank, RREF",
+      "path": "commands/matrix-ops.md",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "matrix": {
+            "type": "string",
+            "description": "Matrix definition (e.g., 'matrix([[1,2],[3,4]])')"
+          },
+          "operation": {
+            "type": "string",
+            "description": "Operation: 'determinant', 'inverse', 'eigenvalues', 'rank', 'rref', 'transpose'",
+            "default": "determinant"
+          },
+          "ring": {
+            "type": "string",
+            "description": "Ring for matrix elements (e.g., 'RR' for reals, 'QQ' for rationals, 'ZZ' for integers)",
+            "default": "QQ"
+          }
+        },
+        "required": ["matrix", "operation"]
+      },
+      "keywords": ["matrix", "linear-algebra"]
+    },
+    {
+      "name": "plot",
+      "displayName": "Generate Mathematical Plot",
+      "description": "Generate plots of mathematical functions and return as base64-encoded PNG image",
+      "path": "commands/plot.md",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "expression": {
+            "type": "string",
+            "description": "Expression to plot (e.g., 'sin(x)')"
+          },
+          "variable": {
+            "type": "string",
+            "description": "Variable to use as x-axis (default: 'x')",
+            "default": "x"
+          },
+          "x_min": {
+            "type": "number",
+            "description": "Minimum x value (default: -10)",
+            "default": -10
+          },
+          "x_max": {
+            "type": "number",
+            "description": "Maximum x value (default: 10)",
+            "default": 10
+          },
+          "title": {
+            "type": "string",
+            "description": "Plot title (optional)",
+            "default": ""
+          }
+        },
+        "required": ["expression"]
+      },
+      "keywords": ["plot", "graph", "visualization"]
+    },
+    {
+      "name": "latex-convert",
+      "displayName": "Convert to LaTeX",
+      "description": "Convert mathematical expressions to LaTeX notation for document preparation",
+      "path": "commands/latex-convert.md",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "expression": {
+            "type": "string",
+            "description": "SageMath expression to convert (e.g., 'sin(x) + 1/x')"
+          },
+          "variables": {
+            "type": "string",
+            "description": "Variables to declare (comma-separated)",
+            "default": ""
+          }
+        },
+        "required": ["expression"]
+      },
+      "keywords": ["latex", "notation", "formatting"]
+    },
+    {
+      "name": "number-theory",
+      "displayName": "Number Theory Operations",
+      "description": "Perform number theory calculations: primality, factorization, divisor functions, and more",
+      "path": "commands/number-theory.md",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "operation": {
+            "type": "string",
+            "description": "Operation: 'is_prime', 'next_prime', 'factor', 'euler_phi', 'gcd', 'lcm', 'prime_range', 'sigma', 'moebius'"
+          },
+          "value": {
+            "type": "string",
+            "description": "Primary value(s) for the operation"
+          },
+          "second_value": {
+            "type": "string",
+            "description": "Secondary value for gcd/lcm operations",
+            "default": ""
+          }
+        },
+        "required": ["operation", "value"]
+      },
+      "keywords": ["number-theory", "prime", "divisor"]
+    }
+  ],
+  "templates": []
+}

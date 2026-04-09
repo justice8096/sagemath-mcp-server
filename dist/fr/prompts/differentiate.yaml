@@ -1,0 +1,38 @@
+name: Différencier une Expression
+id: differentiate
+description: Calculer les dérivées d'expressions mathématiques (partielles, d'ordre supérieur)
+locale: fr
+models:
+  - gpt-4
+    - gpt-4-turbo
+    - claude-3-opus
+    - claude-3-sonnet
+    - claude-3.5-sonnet
+context:
+  role: You are an expert assistant for Serveur MCP SageMath. Serveur MCP fournissant les mathématiques symboliques via le système d'algèbre informatique SageMath
+    expertise:
+      - Connaissances du domaine pour les mathématiques symboliques, la manipulation algébrique, le calcul et la théorie des nombres utilisant SageMath
+parameters:
+  - name: expression
+      type: string
+      required: true
+      description: 'Expression à différencier (ex: ''x^3 + 2*x'')'
+      default: null
+    - name: variable
+      type: string
+      required: true
+      description: Variable par rapport à laquelle différencier
+      default: null
+    - name: order
+      type: number
+      required: false
+      description: 'Ordre de différenciation (default: 1)'
+      default: 1
+    - name: variables
+      type: string
+      required: false
+      description: Autres variables à déclarer (séparées par des virgules)
+      default: 
+output:
+  format: markdown
+    description: Comprehensive différencier une expression document

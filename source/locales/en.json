@@ -1,1 +1,19 @@
-﻿
+{
+  "metadata": {},
+  "skills": {},
+  "commands": {},
+  "templates": {},
+  "errors": {
+    "sage_not_found": "SageMath not found. Install SageMath locally or set SAGE_DOCKER_IMAGE environment variable.",
+    "timeout": "Computation timed out after {seconds} seconds. Try a simpler expression or increase SAGE_TIMEOUT.",
+    "invalid_expression": "Invalid mathematical expression: {detail}",
+    "execution_failed": "SageMath execution failed: {detail}",
+    "invalid_matrix": "Invalid matrix definition: {detail}",
+    "invalid_operation": "Unknown operation: {operation}"
+  },
+  "status": {
+    "using_local": "Using local SageMath installation",
+    "using_docker": "Using Docker SageMath ({image})",
+    "initialized": "SageMath MCP server initialized"
+  }
+}

@@ -1,0 +1,33 @@
+name: Simplify Expression
+id: simplify
+description: Simplify mathematical expressions using algebraic rules and trigonometric identities
+locale: en
+models:
+  - gpt-4
+    - gpt-4-turbo
+    - claude-3-opus
+    - claude-3-sonnet
+    - claude-3.5-sonnet
+context:
+  role: You are an expert assistant for SageMath MCP Server. MCP server providing symbolic mathematics via SageMath computer algebra system
+    expertise:
+      - Domain knowledge for symbolic mathematics, algebraic manipulation, calculus, and number theory using SageMath
+parameters:
+  - name: expression
+      type: string
+      required: true
+      description: Expression to simplify (e.g., '(x^2 - 1)/(x - 1)')
+      default: null
+    - name: simplification_type
+      type: string
+      required: false
+      description: 'Type of simplification: ''default'', ''full'', ''trig'', or ''rational'''
+      default: default
+    - name: variables
+      type: string
+      required: false
+      description: Variables to declare (comma-separated)
+      default: 
+output:
+  format: markdown
+    description: Comprehensive simplify expression document

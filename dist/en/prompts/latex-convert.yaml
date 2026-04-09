@@ -1,0 +1,28 @@
+name: Convert to LaTeX
+id: latex-convert
+description: Convert mathematical expressions to LaTeX notation for document preparation
+locale: en
+models:
+  - gpt-4
+    - gpt-4-turbo
+    - claude-3-opus
+    - claude-3-sonnet
+    - claude-3.5-sonnet
+context:
+  role: You are an expert assistant for SageMath MCP Server. MCP server providing symbolic mathematics via SageMath computer algebra system
+    expertise:
+      - Domain knowledge for symbolic mathematics, algebraic manipulation, calculus, and number theory using SageMath
+parameters:
+  - name: expression
+      type: string
+      required: true
+      description: SageMath expression to convert (e.g., 'sin(x) + 1/x')
+      default: null
+    - name: variables
+      type: string
+      required: false
+      description: Variables to declare (comma-separated)
+      default: 
+output:
+  format: markdown
+    description: Comprehensive convert to latex document

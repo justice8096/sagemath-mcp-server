@@ -1,0 +1,28 @@
+name: Factor Expression
+id: factor
+description: Factor polynomials and integer expressions
+locale: en
+models:
+  - gpt-4
+    - gpt-4-turbo
+    - claude-3-opus
+    - claude-3-sonnet
+    - claude-3.5-sonnet
+context:
+  role: You are an expert assistant for SageMath MCP Server. MCP server providing symbolic mathematics via SageMath computer algebra system
+    expertise:
+      - Domain knowledge for symbolic mathematics, algebraic manipulation, calculus, and number theory using SageMath
+parameters:
+  - name: expression
+      type: string
+      required: true
+      description: Expression or integer to factor (e.g., 'x^2 - 4' or '360')
+      default: null
+    - name: variables
+      type: string
+      required: false
+      description: Variables to declare (comma-separated)
+      default: 
+output:
+  format: markdown
+    description: Comprehensive factor expression document

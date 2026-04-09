@@ -1,0 +1,77 @@
+{
+  "name": "servidor-mcp-de-sagemath",
+  "version": "1.0.0",
+  "description": "Servidor MCP que proporciona matemática simbólica mediante el sistema de álgebra computacional SageMath",
+  "author": "Justice",
+  "license": "GPL-3.0",
+  "keywords": [
+    "sagemath",
+    "mathematics",
+    "symbolic",
+    "algebra",
+    "calculus",
+    "computer-algebra",
+    "mcp",
+    "mcp-server"
+  ],
+  "locale": "es",
+  "skills": [
+    {
+      "name": "symbolic-math",
+      "description": "Conocimiento de dominio para matemática simbólica, manipulación algebraica, cálculo y teoría de números usando SageMath",
+      "path": "skills/symbolic-math"
+    }
+  ],
+  "commands": [
+    {
+      "name": "evaluate",
+      "description": "Ejecutar expresiones arbitrarias de SageMath y retornar el resultado computado",
+      "path": "commands/evaluate.md"
+    },
+    {
+      "name": "solve-equation",
+      "description": "Resolver ecuaciones algebraicas y trascendentales simbólicamente",
+      "path": "commands/solve-equation.md"
+    },
+    {
+      "name": "differentiate",
+      "description": "Calcular derivadas de expresiones matemáticas (parciales, orden superior)",
+      "path": "commands/differentiate.md"
+    },
+    {
+      "name": "integrate",
+      "description": "Calcular integrales indefinidas y definidas de expresiones matemáticas",
+      "path": "commands/integrate.md"
+    },
+    {
+      "name": "simplify",
+      "description": "Simplificar expresiones matemáticas usando reglas algebraicas e identidades trigonométricas",
+      "path": "commands/simplify.md"
+    },
+    {
+      "name": "factor",
+      "description": "Factorizar polinomios y expresiones enteras",
+      "path": "commands/factor.md"
+    },
+    {
+      "name": "matrix-ops",
+      "description": "Realizar operaciones matriciales: determinante, inversa, valores propios, rango, RREF",
+      "path": "commands/matrix-ops.md"
+    },
+    {
+      "name": "plot",
+      "description": "Generar gráficos de funciones matemáticas retornando imagen PNG codificada en base64",
+      "path": "commands/plot.md"
+    },
+    {
+      "name": "latex-convert",
+      "description": "Convertir expresiones matemáticas a notación LaTeX para preparación de documentos",
+      "path": "commands/latex-convert.md"
+    },
+    {
+      "name": "number-theory",
+      "description": "Realizar cálculos de teoría de números: primalidad, factorización, funciones divisoras",
+      "path": "commands/number-theory.md"
+    }
+  ]
+}
