@@ -1,0 +1,27 @@
+﻿version: '3.8'
+
+services:
+  sagemath-mcp:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+    ports:
+      - "${PORT:-3000}:3000"
+    environment:
+      - TRANSPORT=http
+      - PORT=3000
+      - SAGE_TIMEOUT=${SAGE_TIMEOUT:-30000}
+      - SAGE_LOCALE=${SAGE_LOCALE:-en}
+      - API_KEY=${API_KEY:-}
+    volumes:
+      - sage-tmp:/tmp
+    restart: unless-stopped
+    networks:
+      - sagemath-network
+
+volumes:
+  sage-tmp:
+
+networks:
+  sagemath-network:
+    driver: bridge

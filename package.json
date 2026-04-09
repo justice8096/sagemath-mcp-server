@@ -1,0 +1,39 @@
+﻿{
+  "name": "sagemath-mcp-server",
+  "version": "1.0.0",
+  "description": "MCP server providing symbolic mathematics via SageMath computer algebra system",
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "start": "node dist/index.js",
+    "start:http": "TRANSPORT=http node dist/index.js",
+    "start:stdio": "node dist/index.js",
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "build:formats": "tsx build.ts",
+    "build:claude": "tsx build.ts --format claude-plugin",
+    "build:openai": "tsx build.ts --format openai",
+    "build:n8n": "tsx build.ts --format n8n",
+    "build:mcp": "tsx build.ts --format mcp-server",
+    "build:prompts": "tsx build.ts --format prompts",
+    "build:cli": "tsx build.ts --format cli",
+    "build:locale:es": "tsx build.ts --locale es",
+    "build:locale:fr": "tsx build.ts --locale fr",
+    "clean": "rm -rf dist",
+    "validate": "tsx build.ts --validate-only"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.6.1",
+    "express": "^4.21.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "@types/express": "^5.0.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  }
+}
