@@ -1,0 +1,13 @@
+node_modules
+dist
+.git
+.github
+*.md
+!README.md
+tests
+.env
+.env.*
+*.log
+sbom.cdx.json
+THREAT_MODEL.md
+SECURITY.md

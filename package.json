@@ -20,10 +20,11 @@
     "build:locale:es": "tsx build.ts --locale es",
     "build:locale:fr": "tsx build.ts --locale fr",
     "clean": "rm -rf dist",
-    "validate": "tsx build.ts --validate-only"
+    "validate": "tsx build.ts --validate-only",
+    "prepublishOnly": "npm run build"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=18.0.0"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.6.1",
@@ -35,5 +36,30 @@
     "@types/express": "^5.0.0",
     "tsx": "^4.19.2",
     "typescript": "^5.7.2"
-  }
+  },
+  "bin": {
+    "sagemath-mcp": "./build/index.js"
+  },
+  "files": [
+    "build/",
+    "LICENSE",
+    "README.md"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/justice8096/sagemath-mcp-server.git"
+  },
+  "keywords": [
+    "mcp",
+    "sagemath",
+    "math",
+    "computer-algebra",
+    "ai",
+    "llm"
+  ],
+  "license": "MIT",
+  "author": "Justice E. Chase"
 }
