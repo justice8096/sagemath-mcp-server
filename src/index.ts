@@ -21,6 +21,8 @@ import {
   registerLatexConvertTool,
   registerNumberTheoryTool,
 } from "./tools/index.js";
+import { withAuditLogging } from "./services/audit-logger.js";
+
 
 const transportMode = process.env.TRANSPORT || "stdio";
 const locale = process.env.SAGE_LOCALE || "en";
@@ -31,6 +33,12 @@ function createServer(): McpServer {
     name: "sagemath-mcp-server",
     version: "1.0.0",
   });
+
+  // Wrap registerTool to add audit logging
+  const origRegisterTool = server.registerTool.bind(server);
+  server.registerTool = (name: string, config: any, handler: any) => {
+    return origRegisterTool(name, config, withAuditLogging(name, handler));
+  };
 
   // Register all tools
   registerEvaluateTool(server);
@@ -111,6 +119,7 @@ async function main(): Promise<void> {
     // Initialize i18n and SageMath executor
     await initI18n(locale);
     await initSageExecutor();
+    console.error("[SageMath MCP] Audit logging enabled — tool invocations logged to stderr");
     console.error(`[SageMath MCP] ${t("status.initialized")}`);
 
     if (transportMode === "http") {
