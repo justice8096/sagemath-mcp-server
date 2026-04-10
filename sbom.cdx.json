@@ -1,0 +1,44 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.5",
+  "serialNumber": "urn:uuid:777711bf-e199-40b0-8df5-37774d6eaaa5",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2026-04-10T08:22:00.312Z",
+    "tools": [
+      {
+        "vendor": "manual",
+        "name": "post-commit-audit",
+        "version": "1.0.0"
+      }
+    ],
+    "component": {
+      "type": "application",
+      "name": "sagemath-mcp-server",
+      "version": "1.0.0"
+    }
+  },
+  "components": [
+    {
+      "type": "library",
+      "name": "@modelcontextprotocol/sdk",
+      "version": "1.6.1",
+      "purl": "pkg:npm/%40modelcontextprotocol/sdk@1.6.1",
+      "scope": "required"
+    },
+    {
+      "type": "library",
+      "name": "express",
+      "version": "4.21.0",
+      "purl": "pkg:npm/express@4.21.0",
+      "scope": "required"
+    },
+    {
+      "type": "library",
+      "name": "zod",
+      "version": "3.23.8",
+      "purl": "pkg:npm/zod@3.23.8",
+      "scope": "required"
+    }
+  ]
+}
