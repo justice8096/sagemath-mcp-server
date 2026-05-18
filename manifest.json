@@ -1,0 +1,79 @@
+{
+  "manifest_version": "0.3",
+  "name": "sagemath-mcp-server",
+  "display_name": "SageMath MCP Server",
+  "version": "1.0.1",
+  "description": "10 symbolic-math tools for LLMs via SageMath's full computer algebra system.",
+  "long_description": "Exposes SageMath's 100+ packages through 10 MCP tools so LLMs can delegate mechanical math (exact arithmetic, symbolic algebra, calculus, polynomial/integer factoring, matrix operations, plotting, LaTeX rendering, number theory) instead of computing inline. Wrapper is CC0-1.0; SageMath itself remains GPL-3.0 and runs as a separate subprocess. Requires either a local SageMath install or Docker on the host.",
+  "author": {
+    "name": "Justice E. Chase",
+    "url": "https://github.com/justice8096"
+  },
+  "homepage": "https://github.com/justice8096/sagemath-mcp-server",
+  "documentation": "https://github.com/justice8096/sagemath-mcp-server#readme",
+  "support": "https://github.com/justice8096/sagemath-mcp-server/issues",
+  "license": "CC0-1.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/justice8096/sagemath-mcp-server.git"
+  },
+  "keywords": [
+    "mcp",
+    "sagemath",
+    "math",
+    "computer-algebra",
+    "symbolic",
+    "algebra",
+    "calculus",
+    "ai",
+    "llm"
+  ],
+  "server": {
+    "type": "node",
+    "entry_point": "build/index.js",
+    "mcp_config": {
+      "command": "node",
+      "args": ["${__dirname}/build/index.js"],
+      "env": {
+        "SAGE_TIMEOUT": "${user_config.sage_timeout}",
+        "SAGE_DOCKER_IMAGE": "${user_config.sage_docker_image}",
+        "TRANSPORT": "stdio"
+      }
+    }
+  },
+  "user_config": {
+    "sage_timeout": {
+      "type": "string",
+      "title": "SageMath timeout (ms)",
+      "description": "Per-call SageMath execution timeout in milliseconds.",
+      "required": false,
+      "default": "30000"
+    },
+    "sage_docker_image": {
+      "type": "string",
+      "title": "Docker image",
+      "description": "Image used when SageMath is not installed locally. Leave default unless you have a custom build.",
+      "required": false,
+      "default": "sagemath/sagemath:latest"
+    }
+  },
+  "tools": [
+    { "name": "sage_evaluate", "description": "Execute arbitrary SageMath expressions" },
+    { "name": "sage_solve_equation", "description": "Solve algebraic and transcendental equations symbolically" },
+    { "name": "sage_differentiate", "description": "Compute derivatives of mathematical expressions" },
+    { "name": "sage_integrate", "description": "Compute indefinite and definite integrals" },
+    { "name": "sage_simplify", "description": "Simplify a mathematical expression" },
+    { "name": "sage_factor", "description": "Factor a polynomial or integer" },
+    { "name": "sage_matrix_ops", "description": "Matrix operations: determinant, inverse, eigenvalues, rank, RREF, transpose" },
+    { "name": "sage_plot", "description": "Plot an expression and return a base64 PNG" },
+    { "name": "sage_latex_convert", "description": "Convert a SageMath expression to LaTeX" },
+    { "name": "sage_number_theory", "description": "Primality, factoring, gcd, lcm, totient, sigma, Mobius" }
+  ],
+  "compatibility": {
+    "claude_desktop": ">=0.10.0",
+    "platforms": ["darwin", "win32", "linux"],
+    "runtimes": {
+      "node": ">=18.0.0"
+    }
+  }
+}

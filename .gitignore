@@ -8,3 +8,6 @@ build/
 *.swo
 .vscode/
 .idea/
+
+# MCPB build artifact — regenerate via `npx mcpb pack` before submission
+*.mcpb

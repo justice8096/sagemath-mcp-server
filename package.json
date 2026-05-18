@@ -33,8 +33,9 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@types/node": "^22.10.0",
+    "@anthropic-ai/mcpb": "^2.1.2",
     "@types/express": "^5.0.0",
+    "@types/node": "^22.10.0",
     "tsx": "^4.19.2",
     "typescript": "^5.7.2"
   },
