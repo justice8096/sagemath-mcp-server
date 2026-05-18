@@ -1,6 +1,7 @@
 {
   "name": "@justice8096/sagemath-mcp-server",
-  "version": "1.0.0",
+  "version": "1.0.1",
+  "mcpName": "io.github.justice8096/sagemath-mcp-server",
   "description": "MCP server providing symbolic mathematics via SageMath computer algebra system",
   "type": "module",
   "main": "build/index.js",

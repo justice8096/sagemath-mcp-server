@@ -1,0 +1,53 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.justice8096/sagemath-mcp-server",
+  "description": "MCP server wrapping SageMath's full computer algebra system — 10 symbolic-math tools for LLMs.",
+  "repository": {
+    "url": "https://github.com/justice8096/sagemath-mcp-server",
+    "source": "github"
+  },
+  "version": "1.0.1",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "@justice8096/sagemath-mcp-server",
+      "version": "1.0.1",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": [
+        {
+          "name": "SAGE_TIMEOUT",
+          "description": "Per-call SageMath timeout in milliseconds. Default 30000.",
+          "isRequired": false,
+          "format": "number"
+        },
+        {
+          "name": "SAGE_DOCKER_IMAGE",
+          "description": "Docker image used when SageMath is not installed locally. Default sagemath/sagemath:latest.",
+          "isRequired": false,
+          "format": "string"
+        },
+        {
+          "name": "TRANSPORT",
+          "description": "Transport mode: 'stdio' (default) or 'http'.",
+          "isRequired": false,
+          "format": "string"
+        },
+        {
+          "name": "PORT",
+          "description": "HTTP port when TRANSPORT=http. Default 3000.",
+          "isRequired": false,
+          "format": "number"
+        },
+        {
+          "name": "API_KEY",
+          "description": "If set, HTTP transport requires matching API_KEY header. Ignored for stdio.",
+          "isRequired": false,
+          "format": "string",
+          "isSecret": true
+        }
+      ]
+    }
+  ]
+}
