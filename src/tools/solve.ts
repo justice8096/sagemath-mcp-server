@@ -1,4 +1,4 @@
-﻿import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { t } from "../i18n.js";
 import { executeSage } from "../services/sage-executor.js";
 import { SolveEquationSchema } from "../schemas/common.js";
@@ -19,7 +19,7 @@ export function registerSolveEquationTool(server: McpServer): void {
     },
     async (args: any) => {
       try {
-        const varDeclare = args.variables ? `var('"'"'${args.variables}, ${args.variable}'"'"')` : `var('"'"'${args.variable}'"'"')`;
+        const varDeclare = args.variables ? `var('${args.variables}, ${args.variable}')` : `var('${args.variable}')`;
         const code = `
 ${varDeclare}
 result = solve(${args.equation}, ${args.variable})

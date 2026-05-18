@@ -1,4 +1,4 @@
-﻿export { registerEvaluateTool } from "./evaluate.js";
+export { registerEvaluateTool } from "./evaluate.js";
 export { registerSolveEquationTool } from "./solve.js";
 export { registerDifferentiateTool, registerIntegrateTool } from "./calculus.js";
 export { registerSimplifyTool, registerFactorTool } from "./algebra.js";

@@ -1,4 +1,4 @@
-﻿import { readFileSync } from "fs";
+import { readFileSync } from "fs";
 import { resolve, dirname } from "path";
 import { fileURLToPath } from "url";
 import { LocaleData } from "./types.js";
@@ -13,7 +13,7 @@ let localeData: LocaleData = {};
 export async function initI18n(locale: string): Promise<void> {
   if (!SUPPORTED_LOCALES.includes(locale)) {
     console.warn(
-      `[i18n] Unsupported locale '"'"'${locale}'"'"', falling back to '"'"'${DEFAULT_LOCALE}'"'"'`
+      `[i18n] Unsupported locale '${locale}', falling back to '${DEFAULT_LOCALE}'`
     );
     locale = DEFAULT_LOCALE;
   }
@@ -40,7 +40,7 @@ export async function initI18n(locale: string): Promise<void> {
     console.error(`[i18n] Loaded locale: ${locale}`);
   } catch (error) {
     console.warn(
-      `[i18n] Failed to load locale file for '"'"'${locale}'"'"':`,
+      `[i18n] Failed to load locale file for '${locale}':`,
       error instanceof Error ? error.message : String(error)
     );
     localeData = {};

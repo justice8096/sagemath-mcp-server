@@ -1,4 +1,4 @@
-﻿export interface SageExecutionResult {
+export interface SageExecutionResult {
   stdout: string;
   stderr: string;
   exitCode: number;

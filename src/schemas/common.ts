@@ -1,4 +1,4 @@
-﻿import { z } from "zod";
+import { z } from "zod";
 
 export const ExpressionSchema = z.object({
   expression: z.string().describe("SageMath expression to evaluate"),
@@ -31,7 +31,7 @@ export const IntegrateSchema = z.object({
 
 export const SimplifySchema = z.object({
   expression: z.string().describe("Expression to simplify"),
-  simplification_type: z.string().optional().default("default").describe("Type: '"'"'default'"'"', '"'"'full'"'"', '"'"'trig'"'"', or '"'"'rational'"'"'"),
+  simplification_type: z.string().optional().default("default").describe("Type: 'default', 'full', 'trig', or 'rational'"),
   variables: z.string().optional().default("").describe("Variables to declare (comma-separated)"),
 });
 

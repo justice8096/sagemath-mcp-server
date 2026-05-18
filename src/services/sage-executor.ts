@@ -1,4 +1,4 @@
-﻿import { execSync, spawn } from "child_process";
+import { execSync, spawn } from "child_process";
 import { t } from "../i18n.js";
 import {
   DEFAULT_SAGE_TIMEOUT,

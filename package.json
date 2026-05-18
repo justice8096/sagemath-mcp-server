@@ -1,5 +1,5 @@
 {
-  "name": "sagemath-mcp-server",
+  "name": "@justice8096/sagemath-mcp-server",
   "version": "1.0.0",
   "description": "MCP server providing symbolic mathematics via SageMath computer algebra system",
   "type": "module",
@@ -60,6 +60,6 @@
     "ai",
     "llm"
   ],
-  "license": "MIT",
+  "license": "CC0-1.0",
   "author": "Justice E. Chase"
 }

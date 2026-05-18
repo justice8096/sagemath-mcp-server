@@ -1,4 +1,4 @@
-﻿import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { t } from "../i18n.js";
 import { executeSage } from "../services/sage-executor.js";
 import { ExpressionSchema } from "../schemas/common.js";
