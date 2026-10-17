@@ -14,7 +14,7 @@ If you discover a security vulnerability in SageMath MCP Server, please report i
 
 ### How to Report
 
-1. **Email:** Send a detailed report to security@example.com
+Do not open a public GitHub issue for security vulnerabilities. Use GitHub private vulnerability reporting on this repository (Security tab, "Report a vulnerability"), or email **justice8096@gmail.com** with "SECURITY" in the subject. You should receive an acknowledgment within 48 hours.
 2. **Include:**
    - Description of the vulnerability
    - Steps to reproduce
@@ -26,7 +26,7 @@ If you discover a security vulnerability in SageMath MCP Server, please report i
 - **Acknowledgment:** Within 48 hours of your report
 - **Assessment:** Within 7 days, we will assess severity and impact
 - **Resolution:** Critical vulnerabilities will be patched within 14 days
-- **Disclosure:** We follow coordinated disclosure — we will work with you on timing
+- **Disclosure:** We follow coordinated disclosure Ã¢â‚¬â€ we will work with you on timing
 
 ### Scope
 
