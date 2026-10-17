@@ -10,8 +10,6 @@
 
 If you discover a security vulnerability in SageMath MCP Server, please report it responsibly.
 
-**Do NOT open a public GitHub issue for security vulnerabilities.**
-
 ### How to Report
 
 Do not open a public GitHub issue for security vulnerabilities. Use GitHub private vulnerability reporting on this repository (Security tab, "Report a vulnerability"), or email **justice8096@gmail.com** with "SECURITY" in the subject. You should receive an acknowledgment within 48 hours.
