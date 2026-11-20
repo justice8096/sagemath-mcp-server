@@ -9,6 +9,7 @@ import type { Server } from "node:http";
 import {
   buildSageInvocation,
   executeSage,
+  getSageStatus,
   initSageExecutor,
   resolveExecutorConfig,
   type ExecutorConfig,
@@ -19,7 +20,7 @@ import {
   isAuthorized,
   resolveHttpConfig,
 } from "../src/http.ts";
-import { MAX_CODE_LENGTH } from "../src/constants.ts";
+import { MAX_CODE_BYTES } from "../src/constants.ts";
 import {
   DifferentiateSchema,
   PlotSchema,
@@ -103,6 +104,56 @@ describe("sage invocation (GHSA-2q55-r7q3-v3g3)", () => {
   });
 });
 
+describe("execution mode selection", posixOnly, () => {
+  let dir: string;
+  const make = (name: string, body: string) =>
+    fs.writeFileSync(path.join(dir, name), `#!/bin/sh\n${body}\n`, { mode: 0o755 });
+
+  before(() => {
+    dir = fs.mkdtempSync(path.join(os.tmpdir(), "sagemath-mcp-mode-"));
+    fs.mkdirSync(path.join(dir, "both"));
+    fs.mkdirSync(path.join(dir, "sage-only"));
+    fs.mkdirSync(path.join(dir, "docker-down"));
+    make("both/sage", "exit 0");
+    make("both/docker", "exit 0");
+    make("sage-only/sage", "exit 0");
+    make("docker-down/sage", "exit 0");
+    make("docker-down/docker", "exit 1");
+  });
+
+  after(() => {
+    fs.rmSync(dir, { recursive: true, force: true });
+  });
+
+  it("prefers Docker when both are installed", () => {
+    const cfg = resolveExecutorConfig({ PATH: path.join(dir, "both") });
+    assert.equal(cfg.mode, "docker");
+  });
+
+  it("uses local SageMath when Docker is absent", () => {
+    const cfg = resolveExecutorConfig({ PATH: path.join(dir, "sage-only") });
+    assert.equal(cfg.mode, "local");
+  });
+
+  it("honours an explicit mode and fails if it is unavailable", () => {
+    const both = path.join(dir, "both");
+    assert.equal(resolveExecutorConfig({ PATH: both, SAGE_EXECUTION_MODE: "local" }).mode, "local");
+    assert.throws(() =>
+      resolveExecutorConfig({ PATH: path.join(dir, "sage-only"), SAGE_EXECUTION_MODE: "docker" })
+    );
+  });
+
+  it("falls back to local only when the Docker daemon does not answer", async () => {
+    await initSageExecutor({ PATH: path.join(dir, "both") });
+    assert.equal(getSageStatus().mode, "docker");
+    await initSageExecutor({ PATH: path.join(dir, "docker-down") });
+    assert.equal(getSageStatus().mode, "local");
+    // An explicit docker setting never falls back.
+    await initSageExecutor({ PATH: path.join(dir, "docker-down"), SAGE_EXECUTION_MODE: "docker" });
+    assert.equal(getSageStatus().mode, "docker");
+  });
+});
+
 describe("end to end with a stand-in sage binary", posixOnly, () => {
   let dir: string;
   let marker: string;
@@ -140,7 +191,10 @@ describe("end to end with a stand-in sage binary", posixOnly, () => {
   it("rejects NUL bytes, empty input and oversized input", async () => {
     await assert.rejects(executeSage("print(1)\0"), /NUL/);
     await assert.rejects(executeSage("   "), /empty/);
-    await assert.rejects(executeSage("1".repeat(MAX_CODE_LENGTH + 1)), /longer than/);
+    await assert.rejects(executeSage("1".repeat(MAX_CODE_BYTES + 1)), /longer than/);
+    // The limit counts UTF-8 bytes: 40,000 three-byte characters is 120,000 bytes.
+    await assert.rejects(executeSage("\u4e2d".repeat(40_000)), /longer than/);
+    assert.match(await executeSage("\u4e2d".repeat(30_000)), /^ARG<-c>/);
   });
 
   it("kills the process on timeout", async () => {

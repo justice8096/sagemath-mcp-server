@@ -11,8 +11,9 @@ export const SUPPORTED_LOCALES = ["en", "es", "fr"];
 
 // The program is passed to SageMath as one argv element. Operating systems cap
 // the size of a single argument (128 KiB on Linux), so reject early with a
-// clear message instead of failing inside spawn().
-export const MAX_CODE_LENGTH = 100_000;
+// clear message instead of failing inside spawn(). The limit is in UTF-8
+// bytes, because that is what the operating system counts.
+export const MAX_CODE_BYTES = 100_000;
 
 // Upper bound on captured stdout/stderr per call (a plot is well under 1 MB).
 export const MAX_OUTPUT_BYTES = 16 * 1024 * 1024;
