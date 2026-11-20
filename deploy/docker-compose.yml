@@ -14,13 +14,16 @@ services:
       - TRANSPORT=http
       - HOST=0.0.0.0
       - PORT=3000
-      - SAGE_TIMEOUT=${SAGE_TIMEOUT:-30000}
+      - SAGE_TIMEOUT=${SAGE_TIMEOUT:-120000}
       - SAGE_LOCALE=${SAGE_LOCALE:-en}
       # Required. Compose stops here if it is missing; the server also
       # refuses to start without it. Example: openssl rand -hex 32
       - API_KEY=${API_KEY:?Set API_KEY to a random secret of at least 16 characters}
     volumes:
       - sage-tmp:/tmp
+    # Run a small init as PID 1 so finished SageMath helper processes are
+    # reaped instead of piling up as zombies.
+    init: true
     restart: unless-stopped
     networks:
       - sagemath-network

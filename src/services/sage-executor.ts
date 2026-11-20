@@ -276,11 +276,11 @@ function validateCode(code: string): void {
   }
 }
 
+// Errors thrown here carry the bare detail. The tool layer adds the
+// "SageMath execution failed:" prefix once.
 export async function executeSage(code: string): Promise<string> {
   if (!config) {
-    throw new Error(
-      t("errors.execution_failed", { detail: "executor not initialized" })
-    );
+    throw new Error("executor not initialized");
   }
   const cfg = config;
   validateCode(code);
@@ -349,11 +349,7 @@ export async function executeSage(code: string): Promise<string> {
       captured += data.length;
       if (captured > MAX_OUTPUT_BYTES) {
         stop();
-        finish(
-          new Error(
-            t("errors.execution_failed", { detail: "output limit exceeded" })
-          )
-        );
+        finish(new Error("output limit exceeded"));
         return;
       }
       if (target === "stdout") stdout += data.toString();
@@ -364,7 +360,7 @@ export async function executeSage(code: string): Promise<string> {
     child.stderr.on("data", collect("stderr"));
 
     child.on("error", (error) => {
-      finish(new Error(t("errors.execution_failed", { detail: error.message })));
+      finish(new Error(error.message));
     });
 
     child.on("close", (exitCode) => {
@@ -372,11 +368,7 @@ export async function executeSage(code: string): Promise<string> {
         finish(null, stdout);
       } else {
         finish(
-          new Error(
-            t("errors.execution_failed", {
-              detail: stderr.trim() || `Process exited with code ${exitCode}`,
-            })
-          )
+          new Error(stderr.trim() || `Process exited with code ${exitCode}`)
         );
       }
     });

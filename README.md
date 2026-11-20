@@ -103,7 +103,7 @@ To accept connections from other machines, set `HOST=0.0.0.0` and put TLS in fro
 | `PORT` | `3000` | HTTP port when `TRANSPORT=http`. |
 | `API_KEY` | (none) | Required when `TRANSPORT=http`, at least 16 characters. Sent by clients as `X-API-Key` or `Authorization: Bearer`. |
 | `SAGE_EXECUTION_MODE` | `auto` | `auto` uses Docker when it is installed and running, otherwise a local `sage`. `local` or `docker` forces one. |
-| `SAGE_TIMEOUT` | `30000` | Per-call SageMath timeout in milliseconds. The process is killed when it expires. |
+| `SAGE_TIMEOUT` | `120000` | Per-call SageMath timeout in milliseconds. The process is killed when it expires. The first call on a host can be slow; lower this once you know how your host behaves. |
 | `SAGE_DOCKER_IMAGE` | `sagemath/sagemath:latest` | Image used in Docker mode. |
 | `SAGE_DOCKER_NETWORK` | `none` | Docker network for each call. `none` gives the container no network. |
 | `SAGE_DOCKER_MEMORY` | `2g` | Memory limit for each container. |

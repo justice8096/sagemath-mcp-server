@@ -164,7 +164,7 @@ describe("end to end with a stand-in sage binary", posixOnly, () => {
     // Prints each argument it receives; sleeps when asked, to test timeouts.
     fs.writeFileSync(
       path.join(dir, "sage"),
-      '#!/bin/sh\ncase "$2" in *SLEEP_FOREVER*) sleep 30;; esac\nfor a in "$@"; do printf \'ARG<%s>\\n\' "$a"; done\n',
+      '#!/bin/sh\ncase "$2" in *SLEEP_FOREVER*) sleep 30;; *FAIL_NOW*) echo "boom from sage" >&2; exit 3;; esac\nfor a in "$@"; do printf \'ARG<%s>\\n\' "$a"; done\n',
       { mode: 0o755 }
     );
     await initSageExecutor({
@@ -195,6 +195,13 @@ describe("end to end with a stand-in sage binary", posixOnly, () => {
     // The limit counts UTF-8 bytes: 40,000 three-byte characters is 120,000 bytes.
     await assert.rejects(executeSage("\u4e2d".repeat(40_000)), /longer than/);
     assert.match(await executeSage("\u4e2d".repeat(30_000)), /^ARG<-c>/);
+  });
+
+  it("reports a failure once, without a doubled prefix", async () => {
+    await assert.rejects(executeSage("FAIL_NOW"), (error: Error) => {
+      assert.equal(error.message, "boom from sage");
+      return true;
+    });
   });
 
   it("kills the process on timeout", async () => {

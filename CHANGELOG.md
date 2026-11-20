@@ -21,6 +21,7 @@ Security release. All users should upgrade. Versions 1.0.0 and 1.0.1 are vulnera
 
 - Docker is now the default when both Docker and a local `sage` are present. Before, a local `sage` won. Set `SAGE_EXECUTION_MODE=local` to keep the old behaviour. If Docker is installed but not running, the server warns and uses the local `sage`.
 - The nine structured tools refuse input that is not plain mathematics, including functions outside the allow-list in `src/services/expression-guard.ts`. Use `sage_evaluate` for anything else.
+- The default `SAGE_TIMEOUT` is now 120 seconds (was 30). A first call on a busy host, or a cold Docker start, can take longer than 30 seconds.
 - `TRANSPORT=http` without `API_KEY` now exits with an error.
 - The HTTP transport listens on `127.0.0.1` by default. Set `HOST=0.0.0.0` to accept remote connections.
 - `GET /health` returns only `{"status":"ok"}`. The earlier detail moved to `GET /status`, which needs the key.
@@ -37,6 +38,8 @@ Security release. All users should upgrade. Versions 1.0.0 and 1.0.1 are vulnera
 - Tool descriptions and error details were missing in the published npm package, because the locale files were not shipped. They are now included, with built-in English as a fallback.
 - `deploy/Dockerfile` copied directories that do not exist.
 - SageMath and Docker detection no longer depends on `which`, so it works on Windows.
+- Error messages no longer repeat "SageMath execution failed:" twice.
+- The compose files run an init process, so finished helper processes no longer collect as zombies in the container.
 - The HTTP transport now works on Node 18.
 
 ### Credits
