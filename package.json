@@ -1,6 +1,6 @@
 {
   "name": "@justice8096/sagemath-mcp-server",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "mcpName": "io.github.justice8096/sagemath-mcp-server",
   "description": "MCP server providing symbolic mathematics via SageMath computer algebra system",
   "type": "module",
@@ -22,6 +22,7 @@
     "build:locale:fr": "tsx build.ts --locale fr",
     "clean": "rm -rf dist",
     "validate": "tsx build.ts --validate-only",
+    "test": "tsx --test tests/server.test.ts tests/security.test.ts tests/expression-guard.test.ts",
     "prepublishOnly": "npm run build"
   },
   "engines": {
@@ -44,6 +45,7 @@
   },
   "files": [
     "build/",
+    "source/locales/",
     "LICENSE",
     "README.md"
   ],

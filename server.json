@@ -1,17 +1,17 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.justice8096/sagemath-mcp-server",
-  "description": "MCP server wrapping SageMath's full computer algebra system — 10 symbolic-math tools for LLMs.",
+  "description": "MCP server wrapping SageMath's full computer algebra system - 10 symbolic-math tools for LLMs.",
   "repository": {
     "url": "https://github.com/justice8096/sagemath-mcp-server",
     "source": "github"
   },
-  "version": "1.0.1",
+  "version": "1.1.0",
   "packages": [
     {
       "registryType": "npm",
       "identifier": "@justice8096/sagemath-mcp-server",
-      "version": "1.0.1",
+      "version": "1.1.0",
       "transport": {
         "type": "stdio"
       },
@@ -29,8 +29,20 @@
           "format": "string"
         },
         {
+          "name": "SAGE_EXECUTION_MODE",
+          "description": "Where SageMath runs: 'auto' (default: Docker if installed and running, otherwise local sage), 'local', or 'docker'. Docker mode runs each call in a throwaway container with no network.",
+          "isRequired": false,
+          "format": "string"
+        },
+        {
           "name": "TRANSPORT",
           "description": "Transport mode: 'stdio' (default) or 'http'.",
+          "isRequired": false,
+          "format": "string"
+        },
+        {
+          "name": "HOST",
+          "description": "Interface the HTTP transport listens on. Default 127.0.0.1.",
           "isRequired": false,
           "format": "string"
         },
@@ -42,7 +54,7 @@
         },
         {
           "name": "API_KEY",
-          "description": "If set, HTTP transport requires matching API_KEY header. Ignored for stdio.",
+          "description": "Required when TRANSPORT=http (at least 16 characters); the server will not start in HTTP mode without it. Clients send it as X-API-Key or Authorization: Bearer. Ignored for stdio.",
           "isRequired": false,
           "format": "string",
           "isSecret": true

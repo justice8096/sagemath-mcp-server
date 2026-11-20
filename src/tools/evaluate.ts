@@ -10,11 +10,14 @@ export function registerEvaluateTool(server: McpServer): void {
       title: "Evaluate SageMath Expression",
       description: t("tool.evaluate.description") || "Execute arbitrary SageMath expressions and return the result",
       inputSchema: ExpressionSchema,
+      // SageMath expressions are Python: this tool can run arbitrary code
+      // with the privileges of the SageMath process. Advertise that honestly
+      // so clients do not auto-approve it as a read-only call.
       annotations: {
-        readOnlyHint: true,
-        destructiveHint: false,
-        idempotentHint: true,
-        openWorldHint: false,
+        readOnlyHint: false,
+        destructiveHint: true,
+        idempotentHint: false,
+        openWorldHint: true,
       },
     },
     async (args: any) => {

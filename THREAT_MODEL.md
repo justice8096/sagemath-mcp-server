@@ -1,78 +1,87 @@
-# Threat Model — SageMath MCP Server
+# Threat Model - SageMath MCP Server
+
+Revised for 1.1.0 (2026-11-20) after three vulnerability reports. The earlier version of this document rated shell injection as mitigated. It was not.
 
 ## 1. System Overview
 
-SageMath MCP Server is an MCP (Model Context Protocol) tool server providing 10 tools for mathematical computation. It communicates via stdio/JSON-RPC and is designed for local, single-user operation.
+SageMath MCP Server provides 10 tools for mathematical computation. It speaks MCP over stdio (default) or Streamable HTTP. Each tool builds a short SageMath program from its arguments and runs it in a child process.
 
 ### Architecture
 
 ```
-LLM Client (Claude, etc.)
-    ↕ stdio/JSON-RPC
-SageMath MCP Server (MCP Server)
-    ↕ child_process / Docker
-SageMath CAS Engine
+LLM client (Claude, etc.)
+    | stdio JSON-RPC, or HTTP + API key
+SageMath MCP Server (Node.js)
+    | child process, argument array, no shell
+SageMath (local binary, or a throwaway Docker container)
 ```
 
 ### Trust Boundaries
 
-1. **LLM ↔ MCP Server:** The MCP protocol boundary. Tool invocations come from the LLM client. Input validation (Zod schemas) is the primary control.
-2. **MCP Server ↔ SageMath:** The system boundary. Commands are passed to a shell; escaping and Docker sandboxing are controls.
+1. **Network to server (HTTP only).** Guarded by the API key. The server will not start in HTTP mode without one.
+2. **Client to server.** Tool calls come from an LLM. The LLM may be acting on untrusted content it has read (prompt injection). Tool arguments are therefore untrusted.
+3. **Server to SageMath.** The program is passed as one process argument. No shell is involved.
+4. **SageMath to host.** SageMath code is Python. In local mode there is no boundary here. In Docker mode the container is the boundary.
 
 ## 2. Assets
 
 | Asset | Sensitivity | Description |
 |-------|-------------|-------------|
-| User math expressions | LOW | Mathematical expressions submitted for evaluation |
-| SageMath execution environment | HIGH | Shell access to SageMath CAS — can execute arbitrary Python |
-| Host file system | HIGH | Accessible if SageMath sandbox is bypassed |
-| Docker socket (if used) | MEDIUM | Container management access |
+| Host file system and user account | HIGH | Reachable by SageMath code in local mode |
+| Local network and cloud credentials | HIGH | Reachable by SageMath code in local mode |
+| API key | HIGH | Grants code execution over HTTP |
+| Docker socket | HIGH | Used by the server to start containers; never mounted into them |
+| Math expressions and results | LOW | Transient; logged to stderr in the audit log |
 
 ## 3. Threat Analysis (STRIDE)
 
 ### Spoofing
-- **Threat:** Malicious LLM client sends crafted tool invocations
-- **Mitigation:** MCP protocol requires explicit tool invocation; Zod schema validation on all inputs
-- **Residual risk:** LOW — single-user, local operation
+- **Threat:** An unauthenticated party calls tools over HTTP.
+- **Mitigation:** API key required to start; constant-time comparison; loopback bind by default.
+- **Residual risk:** MEDIUM if exposed beyond loopback without TLS (the key travels in clear text). LOW on loopback.
 
 ### Tampering
-- **Threat:** Injection of shell commands via crafted math expressions
-- **Mitigation:** `escapeShellString` sanitization; optional Docker containerization with resource limits
-- **Residual risk:** LOW — SageMath's own parser restricts most system operations
+- **Threat:** Shell command injection through tool arguments.
+- **Mitigation:** No shell. The program is a single argv element. Docker mode bypasses the image entrypoint, which would otherwise re-parse arguments through `sh -c`. Regression tests cover the reported inputs.
+- **Residual risk:** LOW.
+
+- **Threat:** Python code in an expression argument (for example `__import__('os').system(...)`).
+- **Mitigation:** The nine structured tools accept plain mathematics only, checked against an allow-list before anything runs. `sage_evaluate` accepts code by design; it is annotated as not read-only so clients prompt for approval. Docker mode confines the effect to a container with no network, no capabilities, and memory and process limits.
+- **Residual risk:** For `sage_evaluate`: HIGH in local mode, LOW in Docker mode. For the other tools: LOW, and it depends on the allow-list being complete.
 
 ### Repudiation
-- **Threat:** No audit trail of tool invocations
-- **Mitigation:** None currently — **gap identified**
-- **Recommendation:** Add structured logging of all tool invocations with timestamps
+- **Threat:** No record of what was run.
+- **Mitigation:** Structured audit log of every tool call on stderr.
+- **Residual risk:** LOW. The log is not tamper-proof.
 
 ### Information Disclosure
-- **Threat:** Math expression results could contain sensitive computed values
-- **Mitigation:** No persistence — results are transient in the MCP response
-- **Residual risk:** LOW
+- **Threat:** SageMath code reads local files and returns them in a tool result.
+- **Mitigation:** Docker mode. None in local mode.
+- **Residual risk:** HIGH in local mode. LOW in Docker mode.
 
 ### Denial of Service
-- **Threat:** Resource exhaustion via expensive mathematical computations
-- **Mitigation:** Configurable execution timeouts; Docker resource limits (if enabled)
-- **Residual risk:** LOW — single-user design accepts this risk
+- **Threat:** Expensive or endless computations; very large requests or outputs.
+- **Mitigation:** Per-call timeout that kills the process or container; 1 MB request limit; 16 MB output limit; container memory and process limits.
+- **Residual risk:** LOW. No rate limiting; single-user design.
 
 ### Elevation of Privilege
-- **Threat:** Escape from SageMath sandbox to gain host shell access
-- **Mitigation:** Docker containerization option isolates execution; `escapeShellString` prevents shell metacharacter injection
-- **Residual risk:** MEDIUM — native (non-Docker) mode runs SageMath with user privileges
+- **Threat:** Code in the container gains root or reaches the host.
+- **Mitigation:** `--cap-drop ALL` and `no-new-privileges` (the stock image gives its user passwordless sudo, which this blocks); no volumes; no network.
+- **Residual risk:** LOW. Depends on the container runtime.
 
 ## 4. Risk Summary
 
-| Risk | Severity | Likelihood | Mitigation Status |
-|------|----------|------------|-------------------|
-| Shell injection via math expressions | HIGH | LOW | MITIGATED — escapeShellString + Docker option |
-| SageMath sandbox escape | HIGH | LOW | PARTIALLY MITIGATED — Docker recommended for untrusted input |
-| Resource exhaustion | MEDIUM | LOW | MITIGATED — timeouts configured |
-| No audit logging | LOW | N/A | GAP — recommended improvement |
+| Risk | Severity | Status |
+|------|----------|--------|
+| Shell injection through tool arguments | CRITICAL | FIXED in 1.1.0 |
+| Unauthenticated HTTP access | CRITICAL | FIXED in 1.1.0 |
+| Python execution through `sage_evaluate`, local mode | HIGH | ACCEPTED, documented. Docker is preferred automatically; local mode is used only without Docker or by explicit setting |
+| Python execution through `sage_evaluate`, Docker mode | LOW | CONFINED |
+| Python execution through the nine structured tools | LOW | BLOCKED by the math-only allow-list |
+| API key sent without TLS | MEDIUM | DOCUMENTED. Use a TLS proxy for remote access |
+| Resource exhaustion | LOW | MITIGATED |
 
 ## 5. Recommended Improvements
 
-1. **Add structured audit logging** for all tool invocations
-2. **Implement rate limiting** on tool calls to prevent abuse
-3. **Default to Docker mode** for untrusted environments
-4. **Add automated security scanning** in CI/CD pipeline (implemented — see .github/workflows/ci.yml)
-5. **Regular dependency updates** via Dependabot or Renovate
+1. Rate limiting on the HTTP transport.
+2. Dependabot or Renovate for dependency updates.

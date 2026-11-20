@@ -1,4 +1,4 @@
-﻿version: '3.8'
+version: "3.8"
 
 services:
   sagemath-mcp:
@@ -6,13 +6,19 @@ services:
       context: ..
       dockerfile: deploy/Dockerfile
     ports:
-      - "${PORT:-3000}:3000"
+      # Published on the Docker host's loopback interface only. To expose the
+      # service to other machines set BIND_ADDRESS=0.0.0.0 and put TLS in
+      # front of it.
+      - "${BIND_ADDRESS:-127.0.0.1}:${PORT:-3000}:3000"
     environment:
       - TRANSPORT=http
+      - HOST=0.0.0.0
       - PORT=3000
       - SAGE_TIMEOUT=${SAGE_TIMEOUT:-30000}
       - SAGE_LOCALE=${SAGE_LOCALE:-en}
-      - API_KEY=${API_KEY:-}
+      # Required. Compose stops here if it is missing; the server also
+      # refuses to start without it. Example: openssl rand -hex 32
+      - API_KEY=${API_KEY:?Set API_KEY to a random secret of at least 16 characters}
     volumes:
       - sage-tmp:/tmp
     restart: unless-stopped

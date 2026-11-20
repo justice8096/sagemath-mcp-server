@@ -24,7 +24,9 @@ export function registerPlotTool(server: McpServer): void {
         const variable = args.variable || "x";
         const xMin = typeof args.x_min === "number" ? args.x_min : -10;
         const xMax = typeof args.x_max === "number" ? args.x_max : 10;
-        const title = (args.title || "").replace(/'/g, "");
+        // JSON string syntax is a valid Python string literal, so the title
+        // cannot terminate the literal or the statement it sits in.
+        const titleLiteral = JSON.stringify(String(args.title || "").slice(0, 200));
 
         // Encode plot as base64 PNG via SageMath subprocess.
         // Uses save() to a temp file then reads + base64-encodes the bytes,
@@ -32,7 +34,7 @@ export function registerPlotTool(server: McpServer): void {
         const code = `
 import tempfile, base64, os
 var('${variable}')
-p = plot(${args.expression}, (${variable}, ${xMin}, ${xMax}), title='${title}')
+p = plot(${args.expression}, (${variable}, ${xMin}, ${xMax}), title=${titleLiteral})
 tmpfile = tempfile.mktemp(suffix='.png')
 p.save(tmpfile, dpi=80)
 with open(tmpfile, 'rb') as fh:

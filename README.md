@@ -26,6 +26,8 @@ LLMs are bad at exact arithmetic, brittle with multi-step algebra, and unreliabl
 
 All tools follow the same schema pattern (see [`src/schemas/common.ts`](src/schemas/common.ts)).
 
+Every tool except `sage_evaluate` accepts plain mathematics only: numbers, variable names, operators, brackets, and a fixed list of math functions (see [`src/services/expression-guard.ts`](src/services/expression-guard.ts)). Anything else is refused with a message that points to `sage_evaluate`, which runs any SageMath code.
+
 ## Installation
 
 The server needs either a local SageMath install or Docker available on the host so it can spawn a SageMath process.
@@ -73,17 +75,22 @@ Add to `~/.claude.json` (or the equivalent Claude Desktop config):
 
 ### Remote / HTTP transport
 
+The HTTP transport requires an API key. The server will not start in HTTP mode without one.
+
 ```bash
-TRANSPORT=http API_KEY=your-secret-key npm start
+export API_KEY="$(openssl rand -hex 32)"
+TRANSPORT=http npm start
 ```
 
-Then point an MCP HTTP client at `http://<host>:3000/mcp` with the matching `API_KEY` header.
+The server listens on `127.0.0.1:3000` by default. Point an MCP HTTP client at `http://127.0.0.1:3000/mcp` and send the key in an `X-API-Key` header or as `Authorization: Bearer <key>`.
+
+To accept connections from other machines, set `HOST=0.0.0.0` and put TLS in front of the port. Read the Security section first: anyone holding the key can run code on the host.
 
 ## Architecture
 
 - **TypeScript** wrapper, runtime is Node.js ≥ 18.
 - **Subprocess wrapping** — the wrapper code is CC0; SageMath remains GPL-3.0 and runs as a separate process, which is the canonical safe interaction model per the [GNU GPL FAQ on aggregation](https://www.gnu.org/licenses/gpl-faq.en.html). Embedding via FFI would propagate copyleft; subprocess execution does not.
-- **Dual transport** — stdio (Claude Desktop, Claude Code, local MCP clients) and Streamable HTTP (remote deployment, optional `API_KEY` env var).
+- **Dual transport** — stdio (Claude Desktop, Claude Code, local MCP clients) and Streamable HTTP (loopback by default, `API_KEY` required).
 - **i18n** — English, Spanish, French via [`src/i18n.ts`](src/i18n.ts) and [`locales/`](locales).
 - **Multi-format build** — `build.ts` emits Claude plugin, OpenAI function-calling, n8n node, MCP server descriptor, CLI tool, and YAML prompt-library outputs from the same source manifest.
 
@@ -92,17 +99,26 @@ Then point an MCP HTTP client at `http://<host>:3000/mcp` with the matching `API
 | Env var | Default | Purpose |
 |---|---|---|
 | `TRANSPORT` | `stdio` | `stdio` or `http`. |
+| `HOST` | `127.0.0.1` | Interface the HTTP transport listens on. |
 | `PORT` | `3000` | HTTP port when `TRANSPORT=http`. |
-| `API_KEY` | (none) | If set, HTTP requests must include matching `API_KEY` header. |
-| `SAGE_TIMEOUT` | `30000` | Per-call SageMath timeout in milliseconds. |
-| `SAGE_DOCKER_IMAGE` | `sagemath/sagemath:latest` | Image used when SageMath isn't installed locally. |
+| `API_KEY` | (none) | Required when `TRANSPORT=http`, at least 16 characters. Sent by clients as `X-API-Key` or `Authorization: Bearer`. |
+| `SAGE_EXECUTION_MODE` | `auto` | `auto` uses Docker when it is installed and running, otherwise a local `sage`. `local` or `docker` forces one. |
+| `SAGE_TIMEOUT` | `30000` | Per-call SageMath timeout in milliseconds. The process is killed when it expires. |
+| `SAGE_DOCKER_IMAGE` | `sagemath/sagemath:latest` | Image used in Docker mode. |
+| `SAGE_DOCKER_NETWORK` | `none` | Docker network for each call. `none` gives the container no network. |
+| `SAGE_DOCKER_MEMORY` | `2g` | Memory limit for each container. |
 
 ## Security
 
-- All SageMath input is sanitized to strip shell metacharacters before subprocess execution; see [`src/services/sage-executor.ts`](src/services/sage-executor.ts).
-- HTTP transport requires `API_KEY` if set — there is no default credential.
-- See [`SECURITY.md`](SECURITY.md) and [`THREAT_MODEL.md`](THREAT_MODEL.md) for the full posture.
-- Pre-commit audit suite under [`audits/`](audits/): SAST/DAST scan, supply-chain audit, CWE mapping, LLM-compliance report, contribution analysis.
+SageMath code is Python. `sage_evaluate` runs any SageMath code, so it can open files, start processes and use the network. Treat access to that tool as the ability to run code. The other nine tools accept plain mathematics only and cannot run code.
+
+- **Docker is the default.** When Docker is installed and running, each call runs in a throwaway container with no network, no Linux capabilities, and memory and process limits. Without Docker the server uses a local `sage`, and the code runs as your user, with your files. Set `SAGE_EXECUTION_MODE=docker` to rule out that fallback.
+- **No shell.** The program reaches SageMath as a single process argument. Shell characters in tool arguments have no effect. Versions up to 1.0.1 built a shell command line and were open to command injection; upgrade.
+- **HTTP needs a key.** The HTTP transport refuses to start without `API_KEY` and listens on loopback by default.
+- **Math-only tools.** The nine structured tools check their expressions against an allow-list before anything runs. Quotes, attribute access, keywords and unknown function calls are refused.
+- **Prompt injection.** A model that reads untrusted content can be steered into calling these tools. `sage_evaluate` is marked as not read-only so that clients ask before running it. The other nine are read-only.
+- See [`SECURITY.md`](SECURITY.md) and [`THREAT_MODEL.md`](THREAT_MODEL.md) for the full posture, and [`CHANGELOG.md`](CHANGELOG.md) for the 1.1.0 security fixes.
+- Audit reports are under [`audits/`](audits/): SAST/DAST scan, supply-chain audit, CWE mapping, LLM-compliance report, contribution analysis.
 
 ## License
 
@@ -110,4 +126,4 @@ This wrapper is released under [CC0-1.0](LICENSE) (public domain). SageMath itse
 
 ## Status
 
-`v1.0.0` — public release. The wrapper layer is stable; the SageMath surface is feature-rich and stable upstream. File issues at https://github.com/justice8096/sagemath-mcp-server/issues.
+`v1.1.0` - security release. Versions up to 1.0.1 are vulnerable; see [`CHANGELOG.md`](CHANGELOG.md). The wrapper layer is stable; the SageMath surface is feature-rich and stable upstream. File issues at https://github.com/justice8096/sagemath-mcp-server/issues.

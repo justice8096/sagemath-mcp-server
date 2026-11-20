@@ -9,8 +9,11 @@ services:
       - TRANSPORT=${TRANSPORT:-stdio}
       - PORT=${PORT:-3000}
       - LOG_LEVEL=${LOG_LEVEL:-info}
+      # Only used when TRANSPORT=http, which will not start without API_KEY.
+      - HOST=${HOST:-0.0.0.0}
+      - API_KEY=${API_KEY:-}
     ports:
-      - "${PORT:-3000}:3000"
+      - "${BIND_ADDRESS:-127.0.0.1}:${PORT:-3000}:3000"
     stdin_open: true
     volumes:
       - sage-data:/app/data
