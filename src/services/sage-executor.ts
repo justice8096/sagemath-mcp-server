@@ -9,7 +9,7 @@ import {
   DEFAULT_SAGE_DOCKER_NETWORK,
   DEFAULT_SAGE_DOCKER_MEMORY,
   DEFAULT_SAGE_DOCKER_PIDS_LIMIT,
-  MAX_CODE_LENGTH,
+  MAX_CODE_BYTES,
   MAX_OUTPUT_BYTES,
 } from "../constants.js";
 
@@ -137,21 +137,72 @@ export function resolveExecutorConfig(
     timeoutMs: parsePositiveInt(env.SAGE_TIMEOUT, DEFAULT_SAGE_TIMEOUT),
   };
 
-  if (requested !== "docker") {
-    const sagePath = findOnPath("sage", env, platform);
-    if (sagePath) return { ...base, mode: "local", sagePath };
-    if (requested === "local") throw new Error(t("errors.sage_not_found"));
+  const sagePath = findOnPath("sage", env, platform) ?? undefined;
+  const dockerPath = findOnPath("docker", env, platform) ?? undefined;
+
+  if (requested === "local") {
+    if (!sagePath) throw new Error(t("errors.sage_not_found"));
+    return { ...base, mode: "local", sagePath };
+  }
+  if (requested === "docker") {
+    if (!dockerPath) throw new Error(t("errors.sage_not_found"));
+    return { ...base, mode: "docker", dockerPath };
   }
 
-  const dockerPath = findOnPath("docker", env, platform);
-  if (dockerPath) return { ...base, mode: "docker", dockerPath };
+  // auto: prefer Docker, because it confines the code that tools run.
+  // sagePath is kept so initSageExecutor can fall back if the Docker daemon
+  // is not running.
+  if (dockerPath) return { ...base, mode: "docker", dockerPath, sagePath };
+  if (sagePath) return { ...base, mode: "local", sagePath };
   throw new Error(t("errors.sage_not_found"));
+}
+
+/** True when the Docker daemon answers within a few seconds. */
+export function dockerDaemonResponds(
+  dockerPath: string,
+  timeoutMs = 5000
+): Promise<boolean> {
+  return new Promise((resolve) => {
+    let done = false;
+    const finish = (ok: boolean) => {
+      if (done) return;
+      done = true;
+      clearTimeout(timer);
+      resolve(ok);
+    };
+    const child = spawn(dockerPath, ["version", "--format", "{{.Server.Version}}"], {
+      shell: false,
+      windowsHide: true,
+      stdio: "ignore",
+    });
+    const timer = setTimeout(() => {
+      child.kill();
+      finish(false);
+    }, timeoutMs);
+    child.on("error", () => finish(false));
+    child.on("close", (code) => finish(code === 0));
+  });
 }
 
 export async function initSageExecutor(
   env: NodeJS.ProcessEnv = process.env
 ): Promise<void> {
-  config = resolveExecutorConfig(env);
+  let resolved = resolveExecutorConfig(env);
+
+  // In auto mode with both available, use local SageMath only if Docker
+  // cannot be reached, and say so.
+  if (resolved.mode === "docker" && resolved.sagePath && resolved.dockerPath) {
+    if (!(await dockerDaemonResponds(resolved.dockerPath))) {
+      console.error(
+        "[SageMath MCP] WARNING: Docker is installed but not responding. " +
+          "Falling back to local SageMath, which runs code as the current user. " +
+          "Set SAGE_EXECUTION_MODE=docker to refuse this fallback."
+      );
+      resolved = { ...resolved, mode: "local" };
+    }
+  }
+
+  config = resolved;
   if (config.mode === "local") {
     console.error(t("status.using_local"));
   } else {
@@ -216,10 +267,10 @@ function validateCode(code: string): void {
       t("errors.invalid_expression", { detail: "input contains a NUL byte" })
     );
   }
-  if (code.length > MAX_CODE_LENGTH) {
+  if (Buffer.byteLength(code, "utf8") > MAX_CODE_BYTES) {
     throw new Error(
       t("errors.invalid_expression", {
-        detail: `input is longer than ${MAX_CODE_LENGTH} characters`,
+        detail: `input is longer than ${MAX_CODE_BYTES} bytes`,
       })
     );
   }

@@ -25,7 +25,7 @@ Security release. All users should upgrade. Versions 1.0.0 and 1.0.1 are vulnera
 - The HTTP transport listens on `127.0.0.1` by default. Set `HOST=0.0.0.0` to accept remote connections.
 - `GET /health` returns only `{"status":"ok"}`. The earlier detail moved to `GET /status`, which needs the key.
 - HTTP request bodies are limited to 1 MB (was 50 MB).
-- Expressions longer than 100,000 characters are rejected.
+- Programs longer than 100,000 bytes are rejected.
 
 ### Added
 
