@@ -26,7 +26,7 @@ const tools = [
 ];
 
 async function main(): Promise<void> {
-  const server = new McpServer({ name: "servidor-mcp-de-sagemath-mcp", version: "1.0.0" });
+  const server = new McpServer({ name: "servidor-mcp-de-sagemath-mcp", version: "1.1.0" });
   const transport = new StdioServerTransport();
   server.server.setRequestHandler("tools/list", async () => ({ tools }));
   server.server.setRequestHandler("tools/call", async (request: { params: { name: string; arguments?: Record<string, unknown> } }) => {

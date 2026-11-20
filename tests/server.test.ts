@@ -1,99 +1,92 @@
-import { describe, it, expect } from 'vitest';
-import * as fs from 'fs';
-import * as path from 'path';
+import { describe, it } from "node:test";
+import assert from "node:assert/strict";
+import * as fs from "node:fs";
+import * as path from "node:path";
+import { fileURLToPath } from "node:url";
 
-describe('SageMath MCP Server', () => {
-  describe('Project Structure', () => {
-    it('should have a valid package.json', () => {
-      const pkg = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../package.json'), 'utf8'));
-      expect(pkg.name).toBeDefined();
-      expect(pkg.version).toBeDefined();
-    });
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const readJson = (rel: string) =>
+  JSON.parse(fs.readFileSync(path.join(root, rel), "utf8"));
 
-    it('should have required source files', () => {
-      const srcDir = path.resolve(__dirname, '../src');
-      expect(fs.existsSync(srcDir)).toBe(true);
-    });
+function sourceFiles(): string[] {
+  const out: string[] = [];
+  const walk = (dir: string) => {
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+      const full = path.join(dir, entry.name);
+      if (entry.isDirectory()) walk(full);
+      else if (full.endsWith(".ts")) out.push(full);
+    }
+  };
+  walk(path.join(root, "src"));
+  return out;
+}
 
-    it('should have manifest.json', () => {
-      expect(fs.existsSync(path.resolve(__dirname, '../manifest.json'))).toBe(true);
-    });
+describe("project structure", () => {
+  it("has a valid package.json", () => {
+    const pkg = readJson("package.json");
+    assert.ok(pkg.name);
+    assert.ok(pkg.version);
   });
 
-  describe('Manifest Validation', () => {
-    it('should have valid manifest with tools array', () => {
-      const manifest = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../manifest.json'), 'utf8'));
-      expect(manifest.tools).toBeDefined();
-      expect(Array.isArray(manifest.tools)).toBe(true);
-      expect(manifest.tools.length).toBe(10);
-    });
-
-    it('should have tool names and descriptions', () => {
-      const manifest = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../manifest.json'), 'utf8'));
-      for (const tool of manifest.tools) {
-        expect(tool.name).toBeDefined();
-        expect(typeof tool.name).toBe('string');
-        expect(tool.name.length).toBeGreaterThan(0);
-      }
-    });
+  it("ships the locale files the server loads at runtime", () => {
+    const pkg = readJson("package.json");
+    assert.ok(pkg.files.includes("source/locales/"));
+    for (const locale of ["en", "es", "fr"]) {
+      const data = readJson(`source/locales/${locale}.json`);
+      assert.equal(typeof data, "object");
+    }
   });
 
-  describe('i18n Locales', () => {
-    it('should have locale files for en, es, fr', () => {
-      for (const locale of ['en', 'es', 'fr']) {
-        const localePath = path.resolve(__dirname, `../locales/${locale}.json`);
-        expect(fs.existsSync(localePath)).toBe(true);
-        const data = JSON.parse(fs.readFileSync(localePath, 'utf8'));
-        expect(typeof data).toBe('object');
-      }
-    });
+  it("has SECURITY.md and LICENSE", () => {
+    assert.ok(fs.existsSync(path.join(root, "SECURITY.md")));
+    assert.ok(fs.existsSync(path.join(root, "LICENSE")));
+  });
+});
+
+describe("manifest", () => {
+  it("lists the ten tools", () => {
+    const manifest = readJson("manifest.json");
+    assert.ok(Array.isArray(manifest.tools));
+    assert.equal(manifest.tools.length, 10);
+    for (const tool of manifest.tools) {
+      assert.equal(typeof tool.name, "string");
+      assert.ok(tool.name.length > 0);
+    }
   });
 
-  describe('Security Checks', () => {
-    it('should not contain hardcoded secrets', () => {
-      const srcDir = path.resolve(__dirname, '../src');
-      if (!fs.existsSync(srcDir)) return;
-      const files = fs.readdirSync(srcDir, { recursive: true });
-      const secretPatterns = [
-        /sk-[a-zA-Z0-9]{20,}/,
-        /AKIA[0-9A-Z]{16}/,
-        /ghp_[a-zA-Z0-9]{36}/,
-      ];
-      for (const file of files) {
-        const fullPath = path.join(srcDir, file);
-        if (fs.statSync(fullPath).isDirectory()) continue;
-        const content = fs.readFileSync(fullPath, 'utf8');
-        for (const pattern of secretPatterns) {
-          expect(content).not.toMatch(pattern);
-        }
-      }
-    });
+  it("keeps every version string in step with package.json", async () => {
+    const { SERVER_VERSION } = await import("../src/constants.ts");
+    const version = readJson("package.json").version;
+    const server = readJson("server.json");
+    assert.equal(SERVER_VERSION, version);
+    assert.equal(readJson("manifest.json").version, version);
+    assert.equal(server.version, version);
+    assert.equal(server.packages[0].version, version);
+  });
+});
 
-    it('should have SECURITY.md', () => {
-      expect(fs.existsSync(path.resolve(__dirname, '../SECURITY.md'))).toBe(true);
-    });
-
-    it('should have LICENSE', () => {
-      expect(fs.existsSync(path.resolve(__dirname, '../LICENSE'))).toBe(true);
-    });
+describe("source hygiene", () => {
+  it("contains no hardcoded secrets", () => {
+    const patterns = [/sk-[a-zA-Z0-9]{20,}/, /AKIA[0-9A-Z]{16}/, /ghp_[a-zA-Z0-9]{36}/];
+    for (const file of sourceFiles()) {
+      const content = fs.readFileSync(file, "utf8");
+      for (const pattern of patterns) assert.doesNotMatch(content, pattern, file);
+    }
   });
 
-  describe('Input Sanitization', () => {
-    it('should have escapeShellString function in sage-executor', () => {
-      const srcDir = path.resolve(__dirname, '../src');
-      if (!fs.existsSync(srcDir)) return;
-      const files = fs.readdirSync(srcDir, { recursive: true });
-      let found = false;
-      for (const file of files) {
-        const fullPath = path.join(srcDir, file);
-        if (fs.statSync(fullPath).isDirectory()) continue;
-        const content = fs.readFileSync(fullPath, 'utf8');
-        if (content.includes('escapeShellString') || content.includes('escape')) {
-          found = true;
-          break;
-        }
+  it("never starts a process through a shell", () => {
+    // Regression guard for GHSA-2q55-r7q3-v3g3: exec/execSync build a shell
+    // command line, and shell:true does the same for spawn.
+    for (const file of sourceFiles()) {
+      const content = fs.readFileSync(file, "utf8");
+      assert.doesNotMatch(content, /shell:\s*true/, file);
+      const imports = content.matchAll(
+        /import\s*\{([^}]*)\}\s*from\s*"(?:node:)?child_process"/g
+      );
+      for (const match of imports) {
+        const names = match[1].split(",").map((n) => n.trim()).filter(Boolean);
+        assert.deepEqual(names, ["spawn"], file);
       }
-      expect(found).toBe(true);
-    });
+    }
   });
 });

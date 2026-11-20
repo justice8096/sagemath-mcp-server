@@ -2,7 +2,7 @@
   "manifest_version": "0.3",
   "name": "sagemath-mcp-server",
   "display_name": "SageMath MCP Server",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "10 symbolic-math tools for LLMs via SageMath's full computer algebra system.",
   "long_description": "Exposes SageMath's 100+ packages through 10 MCP tools so LLMs can delegate mechanical math (exact arithmetic, symbolic algebra, calculus, polynomial/integer factoring, matrix operations, plotting, LaTeX rendering, number theory) instead of computing inline. Wrapper is CC0-1.0; SageMath itself remains GPL-3.0 and runs as a separate subprocess. Requires either a local SageMath install or Docker on the host.",
   "author": {
@@ -37,11 +37,19 @@
       "env": {
         "SAGE_TIMEOUT": "${user_config.sage_timeout}",
         "SAGE_DOCKER_IMAGE": "${user_config.sage_docker_image}",
+        "SAGE_EXECUTION_MODE": "${user_config.sage_execution_mode}",
         "TRANSPORT": "stdio"
       }
     }
   },
   "user_config": {
+    "sage_execution_mode": {
+      "type": "string",
+      "title": "Execution mode",
+      "description": "auto, local or docker. auto uses Docker when it is running, otherwise local SageMath. Docker runs each calculation in a throwaway container with no network; choose docker to rule out the local fallback.",
+      "required": false,
+      "default": "auto"
+    },
     "sage_timeout": {
       "type": "string",
       "title": "SageMath timeout (ms)",

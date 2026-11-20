@@ -1,5 +1,5 @@
 name: Serveur MCP SageMath Prompts
-version: 1.0.0
+version: 1.1.0
 description: Serveur MCP fournissant les mathématiques symboliques via le système d'algèbre informatique SageMath
 author: Justice
 locale: fr

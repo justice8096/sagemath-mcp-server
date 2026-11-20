@@ -15,17 +15,20 @@ COPY package*.json ./
 # Install dependencies
 RUN npm ci --production
 
-# Copy compiled TypeScript
-COPY dist/ ./dist/
+# Copy compiled TypeScript (run `npm run build` on the host first)
+COPY build/ ./build/
 
 # Copy locale files
-COPY src/locales/ ./src/locales/
+COPY source/locales/ ./source/locales/
 
 # Switch back to sage user for security
 USER sage
 
 # Set environment variables
 ENV TRANSPORT=http
+# Bind all interfaces inside the container; the compose file decides what the
+# host publishes. The server refuses to start unless API_KEY is set.
+ENV HOST=0.0.0.0
 ENV PORT=3000
 ENV SAGE_TIMEOUT=30000
 ENV SAGE_LOCALE=en
@@ -37,4 +40,4 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
     CMD curl -f http://localhost:3000/health || exit 1
 
 # Start the server
-CMD ["node", "dist/index.js"]
+CMD ["node", "build/index.js"]
