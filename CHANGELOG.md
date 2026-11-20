@@ -12,6 +12,7 @@ Security release. All users should upgrade. Versions 1.0.0 and 1.0.1 are vulnera
 - **Docker confinement.** Each call now runs with `--network none`, `--cap-drop ALL`, `--security-opt no-new-privileges`, a memory limit and a process limit. A timed-out container is killed.
 - **Timeouts now kill the process.** Before, a timed-out computation kept running.
 - **Honest tool annotation.** `sage_evaluate` is no longer marked read-only, so clients ask before running it.
+- **Math-only structured tools.** Every tool except `sage_evaluate` now checks its expressions against an allow-list: numbers, names, operators, brackets, and a fixed list of math functions. Code is refused before anything runs.
 - **Argument validation.** Variable-name fields accept identifiers only. The plot title can no longer end its string literal.
 - **Dependencies.** `npm audit fix` applied (MCP SDK, express, body-parser, hono, fast-uri).
 - `SECURITY.md` and `THREAT_MODEL.md` rewritten. They wrongly said the server had no HTTP endpoints and that escaping prevented injection.
@@ -19,6 +20,7 @@ Security release. All users should upgrade. Versions 1.0.0 and 1.0.1 are vulnera
 ### Changed (may need action)
 
 - Docker is now the default when both Docker and a local `sage` are present. Before, a local `sage` won. Set `SAGE_EXECUTION_MODE=local` to keep the old behaviour. If Docker is installed but not running, the server warns and uses the local `sage`.
+- The nine structured tools refuse input that is not plain mathematics, including functions outside the allow-list in `src/services/expression-guard.ts`. Use `sage_evaluate` for anything else.
 - `TRANSPORT=http` without `API_KEY` now exits with an error.
 - The HTTP transport listens on `127.0.0.1` by default. Set `HOST=0.0.0.0` to accept remote connections.
 - `GET /health` returns only `{"status":"ok"}`. The earlier detail moved to `GET /status`, which needs the key.

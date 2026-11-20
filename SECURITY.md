@@ -30,6 +30,7 @@ Please include:
 ### In Scope
 
 - Any way for a tool argument to reach a shell, or to run outside the SageMath process
+- Any input that gets code past the math-only check on the nine structured tools
 - Authentication or authorization bypass on the HTTP transport
 - Escape from the Docker execution container
 - Credential exposure or leakage
@@ -37,7 +38,7 @@ Please include:
 
 ### Out of Scope
 
-- SageMath code doing what SageMath code can do. See "What this server does not protect against" below.
+- `sage_evaluate` running SageMath code. That is its purpose. See "What this server does not protect against" below.
 - Denial of service by expensive computation (single-user design; timeouts and container limits apply)
 - Issues in upstream dependencies with no demonstrated path through this server
 
@@ -53,13 +54,13 @@ The server exposes SageMath to an MCP client over stdio or HTTP. Each tool build
 - **Docker confinement.** In Docker mode each call runs in a new container with no network (`--network none`), all capabilities dropped, `no-new-privileges`, a memory limit and a process limit. The image entrypoint is replaced with `sage`, because the stock entrypoint passes its arguments through a shell.
 - **Timeouts.** Each call has a timeout. The process, or the container, is killed when it expires.
 - **HTTP authentication.** The HTTP transport refuses to start without `API_KEY` (16 characters or more). Every route except the bare `/health` probe requires the key. Keys are compared in constant time. The listener binds to `127.0.0.1` unless `HOST` is set.
-- **Argument validation.** Fields that hold variable names accept identifiers only.
+- **Math-only structured tools.** Every tool except `sage_evaluate` checks its expressions against an allow-list (numbers, names, operators, brackets, known math functions) and refuses everything else. Fields that hold variable names accept identifiers only.
 - **Audit log.** Every tool call is logged to stderr as JSON.
 - **No stored secrets.** The API key is read from the environment and never written anywhere.
 
 ### What this server does not protect against
 
-SageMath code is Python. Expression arguments are SageMath code by design. A caller who can invoke a tool can run Python with the privileges of the SageMath process.
+SageMath code is Python. `sage_evaluate` accepts SageMath code by design. A caller who can invoke it can run Python with the privileges of the SageMath process.
 
 - In **local mode** that means your user account and your files. Use local mode only when you trust every source of input, including any content the connected model reads.
 - In **Docker mode** that means a throwaway container with no network. Docker is the default when it is installed and running. Set `SAGE_EXECUTION_MODE=docker` for agents and untrusted input, so the server never falls back to local mode.

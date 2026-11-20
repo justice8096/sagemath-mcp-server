@@ -26,6 +26,8 @@ LLMs are bad at exact arithmetic, brittle with multi-step algebra, and unreliabl
 
 All tools follow the same schema pattern (see [`src/schemas/common.ts`](src/schemas/common.ts)).
 
+Every tool except `sage_evaluate` accepts plain mathematics only: numbers, variable names, operators, brackets, and a fixed list of math functions (see [`src/services/expression-guard.ts`](src/services/expression-guard.ts)). Anything else is refused with a message that points to `sage_evaluate`, which runs any SageMath code.
+
 ## Installation
 
 The server needs either a local SageMath install or Docker available on the host so it can spawn a SageMath process.
@@ -108,12 +110,13 @@ To accept connections from other machines, set `HOST=0.0.0.0` and put TLS in fro
 
 ## Security
 
-SageMath code is Python. A SageMath expression can open files, start processes and use the network. That holds for every tool here, because each one places its expression arguments into a SageMath program. Treat access to this server as the ability to run code.
+SageMath code is Python. `sage_evaluate` runs any SageMath code, so it can open files, start processes and use the network. Treat access to that tool as the ability to run code. The other nine tools accept plain mathematics only and cannot run code.
 
 - **Docker is the default.** When Docker is installed and running, each call runs in a throwaway container with no network, no Linux capabilities, and memory and process limits. Without Docker the server uses a local `sage`, and the code runs as your user, with your files. Set `SAGE_EXECUTION_MODE=docker` to rule out that fallback.
 - **No shell.** The program reaches SageMath as a single process argument. Shell characters in tool arguments have no effect. Versions up to 1.0.1 built a shell command line and were open to command injection; upgrade.
 - **HTTP needs a key.** The HTTP transport refuses to start without `API_KEY` and listens on loopback by default.
-- **Prompt injection.** A model that reads untrusted content can be steered into calling these tools. `sage_evaluate` is marked as not read-only so that clients ask before running it.
+- **Math-only tools.** The nine structured tools check their expressions against an allow-list before anything runs. Quotes, attribute access, keywords and unknown function calls are refused.
+- **Prompt injection.** A model that reads untrusted content can be steered into calling these tools. `sage_evaluate` is marked as not read-only so that clients ask before running it. The other nine are read-only.
 - See [`SECURITY.md`](SECURITY.md) and [`THREAT_MODEL.md`](THREAT_MODEL.md) for the full posture, and [`CHANGELOG.md`](CHANGELOG.md) for the 1.1.0 security fixes.
 - Audit reports are under [`audits/`](audits/): SAST/DAST scan, supply-chain audit, CWE mapping, LLM-compliance report, contribution analysis.
 

@@ -46,8 +46,8 @@ SageMath (local binary, or a throwaway Docker container)
 - **Residual risk:** LOW.
 
 - **Threat:** Python code in an expression argument (for example `__import__('os').system(...)`).
-- **Mitigation:** None inside SageMath; expressions are code by design. Docker mode confines the effect to a container with no network, no capabilities, and memory and process limits. `sage_evaluate` is annotated as not read-only so clients prompt for approval.
-- **Residual risk:** HIGH in local mode. LOW in Docker mode.
+- **Mitigation:** The nine structured tools accept plain mathematics only, checked against an allow-list before anything runs. `sage_evaluate` accepts code by design; it is annotated as not read-only so clients prompt for approval. Docker mode confines the effect to a container with no network, no capabilities, and memory and process limits.
+- **Residual risk:** For `sage_evaluate`: HIGH in local mode, LOW in Docker mode. For the other tools: LOW, and it depends on the allow-list being complete.
 
 ### Repudiation
 - **Threat:** No record of what was run.
@@ -75,13 +75,13 @@ SageMath (local binary, or a throwaway Docker container)
 |------|----------|--------|
 | Shell injection through tool arguments | CRITICAL | FIXED in 1.1.0 |
 | Unauthenticated HTTP access | CRITICAL | FIXED in 1.1.0 |
-| Python execution through expressions, local mode | HIGH | ACCEPTED, documented. Docker is preferred automatically; local mode is used only without Docker or by explicit setting |
-| Python execution through expressions, Docker mode | LOW | CONFINED |
+| Python execution through `sage_evaluate`, local mode | HIGH | ACCEPTED, documented. Docker is preferred automatically; local mode is used only without Docker or by explicit setting |
+| Python execution through `sage_evaluate`, Docker mode | LOW | CONFINED |
+| Python execution through the nine structured tools | LOW | BLOCKED by the math-only allow-list |
 | API key sent without TLS | MEDIUM | DOCUMENTED. Use a TLS proxy for remote access |
 | Resource exhaustion | LOW | MITIGATED |
 
 ## 5. Recommended Improvements
 
-1. Restrict expressions with a parser allow-list, so the nine structured tools cannot run arbitrary Python.
-2. Rate limiting on the HTTP transport.
-3. Dependabot or Renovate for dependency updates.
+1. Rate limiting on the HTTP transport.
+2. Dependabot or Renovate for dependency updates.
