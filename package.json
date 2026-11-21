@@ -22,7 +22,7 @@
     "build:locale:fr": "tsx build.ts --locale fr",
     "clean": "rm -rf dist",
     "validate": "tsx build.ts --validate-only",
-    "test": "tsx --test tests/server.test.ts tests/security.test.ts tests/expression-guard.test.ts",
+    "test": "tsx --test tests/server.test.ts tests/security.test.ts tests/expression-guard.test.ts tests/hardening.test.ts",
     "prepublishOnly": "npm run build"
   },
   "engines": {
