@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.1.1 - 2026-11-20
+
+Maintenance release. No change to how the server behaves.
+
+### Changed
+
+- Releases are now published to npm with trusted publishing (OIDC) from the Release workflow. No npm token is stored in the repository. This is the first version published that way.
+- `package.json` metadata normalized with `npm pkg fix` (bin path and repository URL), which removes two warnings at publish time.
+
 ## 1.1.0 - 2026-11-20
 
 Security release. All users should upgrade. Versions 1.0.0 and 1.0.1 are vulnerable.

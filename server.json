@@ -6,12 +6,12 @@
     "url": "https://github.com/justice8096/sagemath-mcp-server",
     "source": "github"
   },
-  "version": "1.1.0",
+  "version": "1.1.1",
   "packages": [
     {
       "registryType": "npm",
       "identifier": "@justice8096/sagemath-mcp-server",
-      "version": "1.1.0",
+      "version": "1.1.1",
       "transport": {
         "type": "stdio"
       },

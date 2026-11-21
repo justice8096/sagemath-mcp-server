@@ -2,7 +2,7 @@
   "manifest_version": "0.3",
   "name": "sagemath-mcp-server",
   "display_name": "SageMath MCP Server",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "10 symbolic-math tools for LLMs via SageMath's full computer algebra system.",
   "long_description": "Exposes SageMath's 100+ packages through 10 MCP tools so LLMs can delegate mechanical math (exact arithmetic, symbolic algebra, calculus, polynomial/integer factoring, matrix operations, plotting, LaTeX rendering, number theory) instead of computing inline. Wrapper is CC0-1.0; SageMath itself remains GPL-3.0 and runs as a separate subprocess. Requires either a local SageMath install or Docker on the host.",
   "author": {

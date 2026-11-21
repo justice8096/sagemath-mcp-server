@@ -2,7 +2,7 @@
 // Auto-generated CLI — project name is read from manifest at build time
 // Run: tsx cli.ts <command> [--param value ...]
 
-const VERSION = "1.1.0";
+const VERSION = "1.1.1";
 const NAME = "SageMath MCP Server";
 
 function showHelp(): void {

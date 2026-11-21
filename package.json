@@ -1,6 +1,6 @@
 {
   "name": "@justice8096/sagemath-mcp-server",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "mcpName": "io.github.justice8096/sagemath-mcp-server",
   "description": "MCP server providing symbolic mathematics via SageMath computer algebra system",
   "type": "module",
@@ -41,7 +41,7 @@
     "typescript": "^5.7.2"
   },
   "bin": {
-    "sagemath-mcp": "./build/index.js"
+    "sagemath-mcp": "build/index.js"
   },
   "files": [
     "build/",
@@ -54,7 +54,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/justice8096/sagemath-mcp-server.git"
+    "url": "git+https://github.com/justice8096/sagemath-mcp-server.git"
   },
   "keywords": [
     "mcp",

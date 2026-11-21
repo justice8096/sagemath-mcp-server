@@ -126,4 +126,4 @@ This wrapper is released under [CC0-1.0](LICENSE) (public domain). SageMath itse
 
 ## Status
 
-`v1.1.0` - security release. Versions up to 1.0.1 are vulnerable; see [`CHANGELOG.md`](CHANGELOG.md). The wrapper layer is stable; the SageMath surface is feature-rich and stable upstream. File issues at https://github.com/justice8096/sagemath-mcp-server/issues.
+`v1.1.1`. Version 1.1.0 was a security release: versions up to 1.0.1 are vulnerable; see [`CHANGELOG.md`](CHANGELOG.md). The wrapper layer is stable; the SageMath surface is feature-rich and stable upstream. File issues at https://github.com/justice8096/sagemath-mcp-server/issues.
