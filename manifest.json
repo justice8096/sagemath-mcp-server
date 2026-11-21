@@ -55,7 +55,7 @@
       "title": "SageMath timeout (ms)",
       "description": "Per-call SageMath execution timeout in milliseconds.",
       "required": false,
-      "default": "30000"
+      "default": "120000"
     },
     "sage_docker_image": {
       "type": "string",

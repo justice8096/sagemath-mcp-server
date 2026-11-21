@@ -5,6 +5,7 @@ services:
     build: .
     container_name: sagemath-mcp-server
     restart: unless-stopped
+    init: true
     environment:
       - TRANSPORT=${TRANSPORT:-stdio}
       - PORT=${PORT:-3000}

@@ -1,7 +1,10 @@
 export const SERVER_NAME = "sagemath-mcp-server";
 export const SERVER_VERSION = "1.1.0";
 
-export const DEFAULT_SAGE_TIMEOUT = 30000; // 30 seconds
+// SageMath takes several seconds to start, and much longer the first time on
+// a busy host or when Docker has to start a container. 30 seconds proved too
+// short in testing, so the default is 2 minutes.
+export const DEFAULT_SAGE_TIMEOUT = 120000; // 120 seconds
 export const DEFAULT_SAGE_DOCKER_IMAGE = "sagemath/sagemath:latest";
 export const DEFAULT_SAGE_DOCKER_NETWORK = "none";
 export const DEFAULT_SAGE_DOCKER_MEMORY = "2g";

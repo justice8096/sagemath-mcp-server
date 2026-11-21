@@ -30,7 +30,7 @@ ENV TRANSPORT=http
 # host publishes. The server refuses to start unless API_KEY is set.
 ENV HOST=0.0.0.0
 ENV PORT=3000
-ENV SAGE_TIMEOUT=30000
+ENV SAGE_TIMEOUT=120000
 ENV SAGE_LOCALE=en
 
 EXPOSE 3000
