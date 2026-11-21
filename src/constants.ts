@@ -1,5 +1,5 @@
 export const SERVER_NAME = "sagemath-mcp-server";
-export const SERVER_VERSION = "1.1.0";
+export const SERVER_VERSION = "1.1.1";
 
 // SageMath takes several seconds to start, and much longer the first time on
 // a busy host or when Docker has to start a container. 30 seconds proved too

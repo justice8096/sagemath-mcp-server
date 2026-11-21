@@ -1,6 +1,6 @@
 {
   "name": "@sagemath-mcp-server/mcp-server",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "MCP server providing symbolic mathematics via SageMath computer algebra system",
   "author": "Justice",
   "license": "CC0-1.0",

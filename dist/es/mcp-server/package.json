@@ -1,6 +1,6 @@
 {
   "name": "@servidor-mcp-de-sagemath/mcp-server",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Servidor MCP que proporciona matemática simbólica mediante el sistema de álgebra computacional SageMath",
   "author": "Justice",
   "license": "CC0-1.0",
