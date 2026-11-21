@@ -17,6 +17,9 @@ permissions:
 
 jobs:
   release:
+    # Publish only from a version tag. A manual run must pick a v* tag under
+    # "Use workflow from"; a run started from a branch is skipped.
+    if: startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
